@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@nx/eslint": "18.0.5",
-    "@nx/js": "18.0.5", 
+    "@nx/js": "18.0.5",
     "@nx/node": "18.0.5",
     "@nx/workspace": "18.0.5",
     "@pact-foundation/pact": "^12.2.0",

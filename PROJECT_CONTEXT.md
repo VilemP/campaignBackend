@@ -48,3 +48,8 @@ For file modifications:
    - Link builder functionality in `libs/reporting/link-builder`
    - Shared through internal library
    - Clear API boundaries
+
+5. GitHub Integration:
+   - Using MCP (Model Context Protocol)
+   - Prefer `push_files` over `create_or_update_file`
+   - Permissions need: Contents R/W access

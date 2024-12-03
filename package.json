@@ -8,7 +8,7 @@
     "libs/*"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "start": "nx serve campaign-backend",
     "build": "nx build campaign-backend",
     "test": "nx test campaign-backend",
@@ -49,6 +49,7 @@
     "nx": "17.2.7",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "husky": "^8.0.0"
   }
 }

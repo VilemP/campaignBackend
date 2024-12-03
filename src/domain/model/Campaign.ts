@@ -2,18 +2,21 @@ import { DomainEntity } from './DomainEntity';
 import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents';
 
 export type BusinessType = 'RETAIL' | 'ECOMMERCE' | 'SERVICE';
+export type CampaignStatus = 'ACTIVE' | 'PAUSED' | 'ENDED';
 
 export interface CampaignState {
     id: string;
     name: string;
     businessType: BusinessType;
+    status: CampaignStatus;
 }
 
 export class Campaign extends DomainEntity {
     private constructor(
         private readonly id: string,
         private name: string,
-        private businessType: BusinessType
+        private businessType: BusinessType,
+        private status: CampaignStatus = 'ACTIVE'
     ) {
         super();
     }
@@ -25,7 +28,7 @@ export class Campaign extends DomainEntity {
     }
 
     static fromState(state: CampaignState): Campaign {
-        return new Campaign(state.id, state.name, state.businessType);
+        return new Campaign(state.id, state.name, state.businessType, state.status);
     }
 
     changeBusinessType(newType: BusinessType): void {
@@ -43,7 +46,15 @@ export class Campaign extends DomainEntity {
         return this.id;
     }
 
+    getName(): string {
+        return this.name;
+    }
+
     getBusinessType(): BusinessType {
         return this.businessType;
+    }
+
+    getStatus(): CampaignStatus {
+        return this.status;
     }
 }

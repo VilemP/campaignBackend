@@ -1,0 +1,36 @@
+{
+  "name": "campaign-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/campaign-backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/campaign-backend",
+        "main": "apps/campaign-backend/src/index.ts",
+        "tsConfig": "apps/campaign-backend/tsconfig.app.json",
+        "assets": ["apps/campaign-backend/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "campaign-backend:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "config": "apps/campaign-backend/vitest.config.ts",
+        "reportsDirectory": "coverage/apps/campaign-backend"
+      }
+    }
+  },
+  "tags": []
+}

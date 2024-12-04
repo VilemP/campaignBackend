@@ -1,77 +1,113 @@
-# Campaign Backend
+# Campaign Management System
 
-A backend service for managing campaign-related operations and data.
+An event-sourced backend service for campaign management using CQRS principles.
 
-## Overview
+## Project Structure
 
-This repository contains the backend implementation for a campaign management system. It provides APIs and services to handle campaign creation, management, and analytics.
-
-## Features
-
-- Campaign CRUD operations
-- User authentication and authorization
-- Campaign analytics and reporting
-- Data persistence and management
+```
+campaign-management/
+├── apps/
+│   └── campaign-backend/       # Main campaign management service
+│       ├── src/
+│       │   ├── domain/        # Domain model and events
+│       │   ├── infrastructure/# Event sourcing and persistence
+│       │   ├── api/          # HTTP API and validation
+│       │   └── index.ts      # Application entry point
+│       ├── test/
+│       └── project.json
+├── libs/
+│   └── reporting/            # Shared reporting functionality
+│       └── link-builder/     # Campaign link building library
+└── nx.json
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- MongoDB
+- Node.js 18.17.0 or higher
+- npm 9.x.x
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/VilemP/campaignBackend.git
-cd campaignBackend
-```
-
-2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
+### Development
+
 ```bash
-cp .env.example .env
-# Edit .env with your configuration
+# Start the development server
+npm run start
+
+# Run tests
+npm run test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
 ```
 
-4. Start the development server:
+### Project Graph
+
+To visualize the project dependency graph:
+
 ```bash
-npm run dev
+npm run graph
 ```
 
-## Project Structure
+## Testing
 
+The project uses Vitest for testing and includes:
+- Unit tests
+- Integration tests
+- Contract tests (Pact.io)
+
+### Running Contract Tests
+
+```bash
+npm run test:pact
 ```
-campaignBackend/
-├── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   └── utils/
-├── tests/
-├── config/
-└── package.json
-```
+
+## Architecture
+
+### Event Sourcing
+
+The system uses event sourcing for state management:
+- All state changes are captured as events
+- Events are the source of truth
+- State is reconstructed from event stream
+
+### CQRS
+
+The system follows Command Query Responsibility Segregation:
+- Commands modify state
+- Queries read state
+- Separate models for reading and writing
+
+### Domain-Driven Design
+
+The project structure follows DDD principles:
+- Rich domain model
+- Bounded contexts
+- Aggregates and entities
+- Domain events
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Create a feature branch
+2. Make your changes
+3. Run tests and linting
+4. Create a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-Project Link: [https://github.com/VilemP/campaignBackend](https://github.com/VilemP/campaignBackend)
+This project is licensed under the MIT License - see the LICENSE file for details

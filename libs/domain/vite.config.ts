@@ -1,20 +1,29 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
-import { getViteConfig } from '@nx/vite/plugins/vite-config';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { join } from 'path';
 
 export default defineConfig({
-  ...getViteConfig(),
+  cacheDir: '../../node_modules/.vite/domain',
+  
+  plugins: [nxViteTsPaths()],
+
+  // Configuration for vitest
   test: {
     globals: true,
-    cache: {
-      dir: '../../node_modules/.vitest'
-    },
     environment: 'node',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
     coverage: {
-      reporter: ['text', 'json', 'html'],
-      reportsDirectory: '../../coverage/libs/domain'
+      reportsDirectory: '../../coverage/libs/domain',
+      provider: 'v8'
+    }
+  },
+
+  // Resolve paths and aliases
+  resolve: {
+    alias: {
+      '@domain': join(__dirname, 'src')
     }
   }
 });

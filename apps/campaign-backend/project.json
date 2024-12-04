@@ -5,30 +5,41 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/campaign-backend",
-        "main": "apps/campaign-backend/src/index.ts",
+        "main": "apps/campaign-backend/src/main.ts",
         "tsConfig": "apps/campaign-backend/tsconfig.app.json",
         "assets": ["apps/campaign-backend/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
+      "executor": "@nx/node:node",
       "options": {
         "buildTarget": "campaign-backend:build"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/campaign-backend/**/*.ts"]
+      }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": ["coverage/apps/campaign-backend"],
       "options": {
-        "config": "apps/campaign-backend/vitest.config.ts",
-        "reportsDirectory": "coverage/apps/campaign-backend"
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/campaign-backend"
       }
     }
   },

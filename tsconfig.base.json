@@ -21,10 +21,10 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@campaign/core": ["libs/core/src/index.ts"],
-      "@campaign/infrastructure": ["libs/infrastructure/src/index.ts"],
-      "@campaign/shared": ["libs/shared/src/index.ts"],
-      "@campaign/event-sourcing": ["libs/event-sourcing/src/index.ts"]
+      "@stroeer-core-configuration/api/core": ["libs/api/core/src/index.ts"],
+      "@stroeer-core-configuration/api/rest": ["libs/api/rest/src/index.ts"],
+      "@stroeer-core-configuration/event-sourcing": ["libs/event-sourcing/src/index.ts"],
+      "@stroeer-core-configuration/reporting/link-builder": ["libs/reporting/link-builder/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

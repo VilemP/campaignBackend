@@ -1,0 +1,35 @@
+{
+  "name": "api-rest",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/rest/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/api/rest",
+        "main": "libs/api/rest/src/index.ts",
+        "tsConfig": "libs/api/rest/tsconfig.lib.json",
+        "assets": ["libs/api/rest/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/api/rest/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "coverage/libs/api/rest"
+      }
+    }
+  },
+  "tags": ["type:lib", "scope:shared"]
+}

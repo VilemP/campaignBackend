@@ -1,1 +1,5 @@
-export type BusinessType = 'RETAIL' | 'ECOMMERCE' | 'SERVICE';
+export enum BusinessType {
+    RETAIL = 'RETAIL',
+    ECOMMERCE = 'ECOMMERCE',
+    SERVICE = 'SERVICE'
+}

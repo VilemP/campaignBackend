@@ -1,5 +1,4 @@
-import { Schema } from '@campaign-backend/api/core';
-
+import type { Schema } from '@stroeer-core-configuration/api-core';
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export interface HttpResponse {

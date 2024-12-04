@@ -38,6 +38,7 @@
     "@nx/eslint": "18.0.5",
     "@nx/js": "18.0.5",
     "@nx/node": "18.0.5",
+    "@nx/vite": "18.0.5",
     "@nx/workspace": "18.0.5",
     "@pact-foundation/pact": "^13.2.0",
     "@types/express": "^4.17.21",
@@ -66,4 +67,3 @@
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
   }
-}

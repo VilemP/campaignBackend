@@ -1,6 +1,5 @@
 import { Query, Schema, InputSchema, OutputSchema } from '@campaign-backend/api/core';
 import { HypermediaResponse, ResourceLink } from '@campaign-backend/api/rest';
-import { z } from 'zod';
 import { Campaign } from '../../domain/model/Campaign';
 import { CampaignRepository } from '../../domain/repositories/CampaignRepository';
 import { EntityNotFoundError } from '../../domain/errors/DomainErrors';
@@ -23,22 +22,22 @@ export interface GetCampaignResponse extends HypermediaResponse {
 
 // Schemas
 const inputSchema = new InputSchema(
-    z.object({
-        id: z.string().uuid()
+    Schema.object({
+        id: Schema.string().uuid()
     })
 );
 
 const outputSchema = new OutputSchema(
-    z.object({
-        id: z.string().uuid(),
-        name: z.string(),
-        status: z.enum(['ACTIVE', 'PAUSED', 'ENDED']),
-        _links: z.object({
-            self: z.object({
-                href: z.string().url()
+    Schema.object({
+        id: Schema.string().uuid(),
+        name: Schema.string(),
+        status: Schema.enum(['ACTIVE', 'PAUSED', 'ENDED']),
+        _links: Schema.object({
+            self: Schema.object({
+                href: Schema.string().url()
             }),
-            metrics: z.object({
-                href: z.string().url()
+            metrics: Schema.object({
+                href: Schema.string().url()
             }).optional()
         })
     })

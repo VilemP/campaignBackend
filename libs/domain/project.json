@@ -6,19 +6,27 @@
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/domain/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/domain/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/libs/domain"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/domain"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/libs/domain"
       }
     }
   },
-  "tags": ["domain"]
+  "tags": [
+    "domain"
+  ]
 }

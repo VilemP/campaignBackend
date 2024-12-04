@@ -6,12 +6,16 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/libs/reporting/link-builder",
         "main": "libs/reporting/link-builder/src/index.ts",
         "tsConfig": "libs/reporting/link-builder/tsconfig.lib.json",
-        "assets": ["libs/reporting/link-builder/*.md"]
+        "assets": [
+          "libs/reporting/link-builder/*.md"
+        ]
       }
     },
     "lint": {
@@ -19,12 +23,17 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "config": "libs/reporting/link-builder/vitest.config.ts",
         "reportsDirectory": "coverage/libs/reporting/link-builder"
       }
     }
   },
-  "tags": ["scope:reporting", "type:feature"]
+  "tags": [
+    "scope:reporting",
+    "type:feature"
+  ]
 }

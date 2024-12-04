@@ -6,12 +6,16 @@
   "targets": {
     "build": {
       "executor": "@nx/node:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/campaign-backend",
         "main": "apps/campaign-backend/src/main.ts",
         "tsConfig": "apps/campaign-backend/tsconfig.app.json",
-        "assets": ["apps/campaign-backend/src/assets"]
+        "assets": [
+          "apps/campaign-backend/src/assets"
+        ]
       },
       "configurations": {
         "production": {
@@ -29,14 +33,20 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/campaign-backend/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/campaign-backend/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/apps/campaign-backend"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/campaign-backend"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/apps/campaign-backend"

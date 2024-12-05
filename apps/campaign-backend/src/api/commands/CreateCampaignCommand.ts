@@ -1,5 +1,5 @@
 import { Schema } from '@libs/validation';
-import { Command } from '../types';
+import { Command } from '@libs/cqrs';
 import { HttpEndpoint } from '../http/types';
 
 const schema = Schema.input(Schema.object({

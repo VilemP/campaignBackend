@@ -1,4 +1,4 @@
-import { Schema } from '../validation/Schema';
+import { Schema } from '../../../../../libs/validation/Schema';
 import { Command } from '../types';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

@@ -1,31 +1,15 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2021",
-    "module": "esnext",
-    "lib": ["es2021"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "target": "es2021",
     "paths": {
+      "@libs/validation/*": ["libs/validation/*"],
       "@stroeer-core-configuration/api-core": ["libs/api/core/src/index.ts"],
       "@stroeer-core-configuration/api-rest": ["libs/api/rest/src/index.ts"],
       "@stroeer-core-configuration/event-sourcing": ["libs/event-sourcing/src/index.ts"],
       "@stroeer-core-configuration/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"]
     }
-  },
-  "exclude": ["node_modules", "tmp"]
+  }
 }

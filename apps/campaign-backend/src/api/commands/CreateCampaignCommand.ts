@@ -1,4 +1,4 @@
-import { Schema } from '../validation/Schema';
+import { Schema } from '@libs/validation/Schema';
 import { Command } from '../types';
 import { HttpEndpoint } from '../http/types';
 

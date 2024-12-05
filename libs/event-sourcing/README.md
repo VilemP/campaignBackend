@@ -21,17 +21,17 @@ The library is agnostic about the actual shape of events and metadata - these ar
 
 ### Event Streams
 
-Events are organized into streams, typically one stream per aggregate instance. Each event in a stream has a sequential version number starting from 0.
+Event records are organized into streams, typically one stream per aggregate instance. Each event record in a stream has a sequential version number starting from 0.
 
 ### Event Store
 
-The EventStore interface defines how to append and read events:
+The EventStore interface defines how to append and read event records:
 
 ```typescript
 interface EventStore {
     append<TEvent, TMeta>(
         streamId: string,
-        events: EventRecord<TEvent, TMeta>[],
+        records: EventRecord<TEvent, TMeta>[],
         expectedVersion?: number
     ): Promise<void>;
 
@@ -45,8 +45,8 @@ interface EventStore {
 
 ### Optimistic Concurrency
 
-The event store implements optimistic concurrency control using event versions:
-- Each event in a stream must have a sequential version number
+The event store implements optimistic concurrency control using event record versions:
+- Each event record in a stream must have a sequential version number
 - When appending, you can specify an expected version
 - If the current version doesn't match, a ConcurrencyError is thrown
 
@@ -68,13 +68,13 @@ interface EventMetadata {
 }
 ```
 
-### Store Events
+### Store Event Records
 
 ```typescript
 const store: EventStore = new InMemoryEventStore();
 
 // Create event record
-const event: EventRecord<UserCreated, EventMetadata> = {
+const record: EventRecord<UserCreated, EventMetadata> = {
     streamId: 'user-123',
     version: 0,
     event: { userId: 'user-123', email: 'test@example.com' },
@@ -82,10 +82,10 @@ const event: EventRecord<UserCreated, EventMetadata> = {
 };
 
 // Append to store
-await store.append('user-123', [event]);
+await store.append('user-123', [record]);
 
 // Read from store
-const events = await store.readStream<UserCreated, EventMetadata>('user-123');
+const records = await store.readStream<UserCreated, EventMetadata>('user-123');
 ```
 
 ### Handle Concurrency
@@ -93,7 +93,7 @@ const events = await store.readStream<UserCreated, EventMetadata>('user-123');
 ```typescript
 // Append with optimistic concurrency
 try {
-    await store.append('user-123', [event], expectedVersion);
+    await store.append('user-123', [record], expectedVersion);
 } catch (error) {
     if (error instanceof ConcurrencyError) {
         // Handle concurrency conflict
@@ -112,9 +112,9 @@ A simple in-memory implementation suitable for testing. Not suitable for product
 
 For production use, you'll need to implement the EventStore interface with a proper database backend. Some considerations:
 
-1. Events are facts - they are immutable and cannot be deleted
+1. Event records are immutable - they cannot be modified or deleted once stored
 2. Sequential versioning is crucial for consistency
-3. Consider implementing snapshotting for performance
+3. Consider implementing snapshotting for performance (snapshots are stored as special event records)
 4. Consider implementing projections for read models
 
 ## Design Principles

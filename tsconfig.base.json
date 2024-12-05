@@ -8,7 +8,6 @@
       "@libs/validation": ["libs/validation/src/lib"],
       "@libs/validation/*": ["libs/validation/src/lib/*"],
       "@libs/cqrs": ["libs/cqrs/src/lib"],
-      "@libs/api-core": ["libs/api/core/src/index.ts"],
       "@libs/api-rest": ["libs/api/rest/src/index.ts"],
       "@libs/event-sourcing": ["libs/event-sourcing/src/index.ts"],
       "@libs/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"]

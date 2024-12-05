@@ -1,18 +1,21 @@
 import { Schema } from '@libs/validation';
 import { Command } from '@libs/cqrs';
-import { HttpEndpoint } from '@libs/api-rest';
+import type { HttpEndpoint } from '@libs/api-rest';
+
+interface CampaignData {
+    name: string;
+    businessType: 'RETAIL' | 'ECOMMERCE' | 'SERVICE';
+}
 
 const schema = Schema.input(Schema.object({
     name: Schema.string().min(3).max(100),
     businessType: Schema.enum(['RETAIL', 'ECOMMERCE', 'SERVICE'])
 }));
 
-type CreateCampaignPayload = (typeof schema)['type'];
-
 export class CreateCampaignCommand implements Command {
     constructor(
-        private readonly payload: CreateCampaignPayload,
-        private readonly repository: any  // Type will be added when repository is implemented
+        private readonly payload: CampaignData,
+        private readonly repository: any
     ) {
         schema.validate(payload);
     }
@@ -22,7 +25,7 @@ export class CreateCampaignCommand implements Command {
     }
 }
 
-export const endpoint: HttpEndpoint = {
+export const endpoint: HttpEndpoint<CampaignData> = {
     method: 'POST',
     path: '/campaigns',
     command: CreateCampaignCommand,
@@ -31,7 +34,7 @@ export const endpoint: HttpEndpoint = {
         201: { description: 'Campaign created successfully' },
         400: { description: 'Invalid request payload' }
     },
-    createPayload: (req: any): CreateCampaignPayload => ({
+    createPayload: (req: any): CampaignData => ({
         name: req.body.name,
         businessType: req.body.businessType
     })

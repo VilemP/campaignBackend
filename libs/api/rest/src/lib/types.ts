@@ -1,22 +1,25 @@
-import { Schema } from '@libs/validation';
-import { Command } from '@libs/cqrs';
-
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+export interface CommandConstructor<TPayload> {
+    new (payload: TPayload, ...deps: any[]): {
+        execute(): Promise<void>;
+    };
+}
 
 export interface HttpResponse {
     description: string;
     content?: {
         'application/json': {
-            schema: Schema<any>;
+            schema: unknown;
         };
     };
 }
 
-export interface HttpEndpoint<TCommand extends Command = Command, TPayload = unknown> {
+export interface HttpEndpoint<TPayload> {
     method: HttpMethod;
     path: string;
-    command: new (payload: TPayload, ...deps: any[]) => TCommand;
-    schema: Schema<TPayload>;
+    command: CommandConstructor<TPayload>;
+    schema: { validate(value: unknown): TPayload };
     responses: Record<number, HttpResponse>;
     createPayload(req: any): TPayload;
     summary?: string;

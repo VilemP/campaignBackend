@@ -1,1 +1,1 @@
-export { HttpEndpoint, HttpMethod, HttpResponse } from './types'; 
+export type { HttpEndpoint, HttpMethod, HttpResponse, CommandConstructor } from './types'; 

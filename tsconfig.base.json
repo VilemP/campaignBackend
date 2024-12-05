@@ -10,7 +10,8 @@
       "@libs/cqrs": ["libs/cqrs/src/lib"],
       "@libs/api-rest": ["libs/api/rest/src/index.ts"],
       "@libs/event-sourcing": ["libs/event-sourcing/src/index.ts"],
-      "@libs/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"]
+      "@libs/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"],
+      "@libs/domain": ["libs/domain/src/index.ts"]
     }
   }
 }

@@ -1,4 +1,9 @@
 {
-  "name": "@stroeer-core-configuration/api-rest",
-  "version": "0.0.1"
+  "name": "@libs/api-rest",
+  "version": "1.0.0",
+  "main": "src/lib/index.ts",
+  "dependencies": {
+    "@libs/validation": "1.0.0",
+    "@libs/cqrs": "1.0.0"
+  }
 } 

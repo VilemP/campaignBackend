@@ -39,6 +39,23 @@ export class CreateUserCommand implements Command {
 }
 ```
 
+### Queries
+
+Queries represent operations that retrieve data. They should be used for read operations.
+
+```typescript
+import { Query } from '@libs/cqrs';
+
+export class GetUserQuery implements Query<User> {
+    constructor(private readonly userId: string) {}
+    
+    async execute(): Promise<User> {
+        // Implementation
+        return user;
+    }
+}
+```
+
 ### Best Practices
 
 Commands should:
@@ -48,8 +65,17 @@ Commands should:
 - Return void
 - Handle one business operation
 
+Queries should:
+- Return data without modifying state
+- Be optimized for read operations
+- Use appropriate return types
+- Cache results when beneficial
+- Handle one query concern
+
 ## Future Considerations
 
-- Query interfaces for read operations
 - Command/Query bus abstractions
 - Result types for operations that need to return data
+- Query result caching utilities
+- Command retry/compensation patterns
+- Event sourcing integration

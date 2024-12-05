@@ -27,6 +27,20 @@ This library provides a unified way to:
 
 4. **Cross-Cutting Concern**: Validation is treated as a core cross-cutting concern, not tied to any specific layer
 
+## Implementation Notes
+
+1. **Input Schema Behavior**:
+   - Coerces values when possible (e.g., string to number)
+   - Removes unknown properties from objects
+   - Non-strict validation for flexibility
+   - Transforms input to match schema
+
+2. **Output Schema Behavior**:
+   - No coercion for strict type checking
+   - Exact property matching
+   - Strict validation for reliability
+   - No transformation of output data
+
 ## Usage
 
 ### Creating Schemas
@@ -47,12 +61,17 @@ type User = (typeof userSchema)['type'];
 ### Validating Data
 
 ```typescript
-// Throws if validation fails
-const validatedData = userSchema.validate({
+// Input validation (lenient)
+const validatedInput = userSchema.validate({
     name: "John",
-    age: "25", // Will be coerced to number
-    email: "john@example.com"
+    age: "25",  // Will be coerced to number
+    email: "john@example.com",
+    extra: "field"  // Will be removed
 });
+
+// Output validation (strict)
+const outputSchema = Schema.output(Schema.object({...}));
+const validatedOutput = outputSchema.validate(data);  // Must match exactly
 ```
 
 ### Best Practices
@@ -77,4 +96,5 @@ Validation errors are thrown as exceptions with:
 - Async validation support
 - Schema composition utilities
 - Integration with OpenAPI/Swagger
-- Performance optimizations for large objects 
+- Performance optimizations for large objects
+- Better TypeScript type inference for complex schemas 

@@ -1,4 +1,7 @@
 {
-  "name": "@stroeer-core-configuration/event-sourcing",
-  "version": "0.0.1"
+  "name": "@libs/event-sourcing",
+  "version": "0.0.1",
+  "dependencies": {
+    "@libs/domain": "0.0.1"
+  }
 }

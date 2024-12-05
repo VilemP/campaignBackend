@@ -5,11 +5,12 @@
     "moduleResolution": "node",
     "target": "es2021",
     "paths": {
-      "@libs/validation/*": ["libs/validation/*"],
-      "@stroeer-core-configuration/api-core": ["libs/api/core/src/index.ts"],
-      "@stroeer-core-configuration/api-rest": ["libs/api/rest/src/index.ts"],
-      "@stroeer-core-configuration/event-sourcing": ["libs/event-sourcing/src/index.ts"],
-      "@stroeer-core-configuration/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"]
+      "@libs/validation": ["libs/validation/src/lib"],
+      "@libs/validation/*": ["libs/validation/src/lib/*"],
+      "@libs/api-core": ["libs/api/core/src/index.ts"],
+      "@libs/api-rest": ["libs/api/rest/src/index.ts"],
+      "@libs/event-sourcing": ["libs/event-sourcing/src/index.ts"],
+      "@libs/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"]
     }
   }
 }

@@ -1,0 +1,8 @@
+{
+  "name": "@libs/validation",
+  "version": "1.0.0",
+  "main": "src/lib/index.ts",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+} 

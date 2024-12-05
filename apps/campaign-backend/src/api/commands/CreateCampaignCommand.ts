@@ -1,11 +1,11 @@
-import { Schema } from '@libs/validation/Schema';
+import { Schema } from '@libs/validation';
 import { Command } from '../types';
 import { HttpEndpoint } from '../http/types';
 
-const schema = Schema.object({
-    name: Schema.string().min(3).max(100).build(),
-    businessType: Schema.enum(['RETAIL', 'ECOMMERCE', 'SERVICE']).build()
-});
+const schema = Schema.input(Schema.object({
+    name: Schema.string().min(3).max(100),
+    businessType: Schema.enum(['RETAIL', 'ECOMMERCE', 'SERVICE'])
+}));
 
 type CreateCampaignPayload = (typeof schema)['type'];
 

@@ -1,40 +1,60 @@
 import { z } from 'zod';
 
+export class ValidationError extends Error {
+    constructor(message: string, public readonly errors: z.ZodError) {
+        super(message);
+        this.name = 'ValidationError';
+    }
+}
+
 export class InputSchema<T> {
-    constructor(private zodSchema: z.ZodType<T>) {}
+    constructor(private readonly zodSchema: z.ZodType<T>) {}
     
-    // For TypeScript type inference
     readonly type!: T;
     
     validate(value: unknown): T {
-        return this.zodSchema
-            .transform((val) => {
-                if (typeof val === 'object' && val !== null) {
-                    // Remove unknown properties
-                    const knownKeys = Object.keys(this.zodSchema.shape || {});
-                    return Object.fromEntries(
-                        Object.entries(val).filter(([key]) => knownKeys.includes(key))
-                    );
-                }
-                return val;
-            })
-            .parse(value, { 
-                coerce: true,
-                strict: false 
-            });
+        try {
+            return this.zodSchema
+                .transform((val: T) => {
+                    if (typeof val === 'object' && val !== null && this.zodSchema instanceof z.ZodObject) {
+                        const shape = this.zodSchema.shape;
+                        const knownKeys = Object.keys(shape);
+                        const result = Object.fromEntries(
+                            Object.entries(val as Record<string, unknown>)
+                                .filter(([key]) => knownKeys.includes(key))
+                        );
+                        return result as T;
+                    }
+                    return val;
+                })
+                .parse(value);
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                throw new ValidationError('Input validation failed', error);
+            }
+            throw error;
+        }
     }
 }
 
 export class OutputSchema<T> {
-    constructor(private zodSchema: z.ZodType<T>) {}
+    constructor(private readonly zodSchema: z.ZodType<T>) {}
     
     readonly type!: T;
     
     validate(value: unknown): T {
-        return this.zodSchema.parse(value, { 
-            coerce: false,
-            strict: true 
-        });
+        try {
+            const result = this.zodSchema.safeParse(value);
+            if (!result.success) {
+                throw new ValidationError('Output validation failed', result.error);
+            }
+            return result.data;
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                throw error;
+            }
+            throw new Error('Unexpected validation error');
+        }
     }
 }
 
@@ -57,6 +77,10 @@ export const Schema = {
     
     object<T extends z.ZodRawShape>(shape: T) {
         return z.object(shape);
+    },
+    
+    array<T>(schema: z.ZodType<T>) {
+        return z.array(schema);
     },
     
     input<T>(zodSchema: z.ZodType<T>): InputSchema<T> {

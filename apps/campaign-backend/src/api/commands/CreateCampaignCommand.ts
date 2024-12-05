@@ -1,6 +1,6 @@
 import { Schema } from '@libs/validation';
 import { Command } from '@libs/cqrs';
-import { HttpEndpoint } from "@libs/api-rest"
+import { HttpEndpoint } from "@libs/api-rest";
 
 const schema = Schema.input(Schema.object({
     name: Schema.string().min(3).max(100),

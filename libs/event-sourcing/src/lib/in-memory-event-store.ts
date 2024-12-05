@@ -6,11 +6,11 @@ import { EventRecord, Serializable } from './types';
  * Not suitable for production use.
  */
 export class InMemoryEventStore implements EventStore {
-  private streams = new Map<string, EventRecord<Serializable>[]>();
+  private streams = new Map<string, EventRecord<Serializable, unknown>[]>();
 
-  async append<T extends Serializable>(
+  async append<T extends Serializable, P>(
     streamId: string,
-    events: EventRecord<T>[],
+    events: EventRecord<T, P>[],
     expectedVersion?: number
   ): Promise<void> {
     const currentEvents = this.streams.get(streamId) || [];
@@ -34,11 +34,11 @@ export class InMemoryEventStore implements EventStore {
     this.streams.set(streamId, [...currentEvents, ...events]);
   }
 
-  async readStream<T extends Serializable>(
+  async readStream<T extends Serializable, P>(
     streamId: string,
     fromVersion?: number,
     toVersion?: number
-  ): Promise<EventRecord<T>[]> {
+  ): Promise<EventRecord<T, P>[]> {
     const events = this.streams.get(streamId) || [];
     
     let result = events;
@@ -51,6 +51,6 @@ export class InMemoryEventStore implements EventStore {
       result = result.filter(event => event.version <= toVersion);
     }
     
-    return result as EventRecord<T>[];
+    return result as EventRecord<T, P>[];
   }
 }

@@ -11,9 +11,9 @@ export interface EventStore {
    * @param expectedVersion - Optional expected version for optimistic concurrency
    * @throws {ConcurrencyError} If expectedVersion doesn't match current version
    */
-  append<T extends Serializable>(
+  append<T extends Serializable, P>(
     streamId: string,
-    events: EventRecord<T>[],
+    events: EventRecord<T, P>[],
     expectedVersion?: number
   ): Promise<void>;
 
@@ -24,11 +24,11 @@ export interface EventStore {
    * @param toVersion - Optional version to read until
    * @returns Array of event records (includes both domain events and snapshots)
    */
-  readStream<T extends Serializable>(
+  readStream<T extends Serializable, P>(
     streamId: string,
     fromVersion?: number,
     toVersion?: number
-  ): Promise<EventRecord<T>[]>;
+  ): Promise<EventRecord<T, P>[]>;
 }
 
 /**

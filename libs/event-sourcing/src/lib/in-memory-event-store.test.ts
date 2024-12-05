@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { InMemoryEventStore } from './in-memory-event-store';
-import { EventRecord, EventMetadata } from './types';
+import { EventRecord, EventMetadata, Serializable } from './types';
 import { ConcurrencyError } from './event-store';
 
-interface TestEvent {
+// Marker interface that makes this a valid event type
+interface TestEventMarker extends Serializable {}
+
+interface TestEventPayload {
   type: string;
   data: string;
 }
 
-function createEventRecord(streamId: string, version: number, data: string): EventRecord<TestEvent> {
+function createEventRecord(streamId: string, version: number, data: string): EventRecord<TestEventMarker, TestEventPayload> {
   return {
     streamId,
     version,
@@ -29,7 +32,7 @@ describe('InMemoryEventStore', () => {
       const event = createEventRecord('stream-1', 0, 'test');
       await store.append('stream-1', [event]);
 
-      const events = await store.readStream('stream-1');
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1');
       expect(events).toHaveLength(1);
       expect(events[0]).toEqual(event);
     });
@@ -41,7 +44,7 @@ describe('InMemoryEventStore', () => {
       await store.append('stream-1', [event1]);
       await store.append('stream-1', [event2]);
 
-      const events = await store.readStream('stream-1');
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1');
       expect(events).toHaveLength(2);
       expect(events[0]).toEqual(event1);
       expect(events[1]).toEqual(event2);
@@ -78,30 +81,30 @@ describe('InMemoryEventStore', () => {
     });
 
     it('should read all events from a stream', async () => {
-      const events = await store.readStream('stream-1');
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1');
       expect(events).toHaveLength(3);
       expect(events.map(e => e.payload.data)).toEqual(['test1', 'test2', 'test3']);
     });
 
     it('should return empty array for non-existent stream', async () => {
-      const events = await store.readStream('non-existent');
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('non-existent');
       expect(events).toEqual([]);
     });
 
     it('should respect fromVersion parameter', async () => {
-      const events = await store.readStream('stream-1', 1);
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1', 1);
       expect(events).toHaveLength(2);
       expect(events.map(e => e.payload.data)).toEqual(['test2', 'test3']);
     });
 
     it('should respect toVersion parameter', async () => {
-      const events = await store.readStream('stream-1', undefined, 1);
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1', undefined, 1);
       expect(events).toHaveLength(2);
       expect(events.map(e => e.payload.data)).toEqual(['test1', 'test2']);
     });
 
     it('should handle version range correctly', async () => {
-      const events = await store.readStream('stream-1', 1, 1);
+      const events = await store.readStream<TestEventMarker, TestEventPayload>('stream-1', 1, 1);
       expect(events).toHaveLength(1);
       expect(events[0].payload.data).toBe('test2');
     });

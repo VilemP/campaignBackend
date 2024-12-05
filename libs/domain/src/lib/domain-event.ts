@@ -1,5 +1,10 @@
 /**
  * Represents something meaningful that happened in the domain.
- * Pure business concept with no technical metadata.
  */
-export interface DomainEvent {}
+export abstract class DomainEvent {
+    readonly occurredAt: Date;
+
+    protected constructor() {
+        this.occurredAt = new Date();
+    }
+}

@@ -1,4 +1,4 @@
-import { DomainEvent } from './DomainEvent';
+import { DomainEvent } from '@libs/domain';
 import { BusinessType } from '../model/types';
 
 export class CampaignCreated extends DomainEvent {

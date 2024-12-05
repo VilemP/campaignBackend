@@ -1,4 +1,4 @@
-import { DomainEntity } from './DomainEntity';
+import { Entity } from '@libs/domain';
 import { BusinessType } from './types';
 import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents';
 
@@ -8,13 +8,13 @@ export interface CampaignState {
     businessType: BusinessType;
 }
 
-export class Campaign extends DomainEntity {
+export class Campaign extends Entity<string> {
     private constructor(
-        private readonly id: string,
+        id: string,
         private name: string,
         private businessType: BusinessType
     ) {
-        super();
+        super(id);
     }
 
     static create(id: string, name: string, businessType: BusinessType): Campaign {
@@ -36,10 +36,6 @@ export class Campaign extends DomainEntity {
         this.businessType = newType;
         
         this.emit(new CampaignBusinessTypeChanged(this.id, oldType, newType));
-    }
-
-    getId(): string {
-        return this.id;
     }
 
     getName(): string {

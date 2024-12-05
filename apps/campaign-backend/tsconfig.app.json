@@ -1,15 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["node"]
   },
-  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": [
-    "src/**/*.ts",
-    "../../libs/validation/**/*.ts"
-  ]
+  "exclude": ["vite.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*.ts"]
 }

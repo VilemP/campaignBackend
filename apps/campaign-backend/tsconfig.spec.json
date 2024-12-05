@@ -1,21 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["vitest/globals", "vitest/importMeta", "node"]
+    "types": ["vitest", "node"]
   },
   "include": [
-    "src/**/*.spec.ts",
+    "vite.config.ts",
     "src/**/*.test.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.tsx",
-    "src/**/*.spec.js",
-    "src/**/*.test.js",
-    "src/**/*.spec.jsx",
-    "src/**/*.test.jsx",
+    "src/**/*.spec.ts",
     "src/**/*.d.ts"
   ]
 }

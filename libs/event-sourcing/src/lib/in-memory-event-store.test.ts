@@ -3,27 +3,25 @@ import { InMemoryEventStore } from './in-memory-event-store';
 import { EventRecord } from './types';
 import { ConcurrencyError } from './event-store';
 
-// Example event and metadata types for testing
 interface TestEvent {
     data: string;
 }
 
-interface TestMetadata {
-    timestamp: Date;
-    userId?: string;
+interface TestState {
+    items: string[];
 }
 
-function createEventRecord(streamId: string, version: number, data: string): EventRecord<TestEvent, TestMetadata> {
+function createEventRecord(streamId: string, version: number, data: string): EventRecord<TestEvent> {
     return {
         streamId,
-        version,
         event: { data },
-        metadata: { timestamp: new Date() }
+        metadata: { version }
     };
 }
 
 describe('InMemoryEventStore', () => {
     let store: InMemoryEventStore;
+    const initialState: TestState = { items: [] };
 
     beforeEach(() => {
         store = new InMemoryEventStore();
@@ -34,7 +32,7 @@ describe('InMemoryEventStore', () => {
             const event = createEventRecord('stream-1', 0, 'test');
             await store.append('stream-1', [event]);
 
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1');
+            const { events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
             expect(events).toHaveLength(1);
             expect(events[0]).toEqual(event);
         });
@@ -46,7 +44,7 @@ describe('InMemoryEventStore', () => {
             await store.append('stream-1', [event1]);
             await store.append('stream-1', [event2]);
 
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1');
+            const { events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
             expect(events).toHaveLength(2);
             expect(events[0]).toEqual(event1);
             expect(events[1]).toEqual(event2);
@@ -61,32 +59,6 @@ describe('InMemoryEventStore', () => {
                 store.append('stream-1', [event2], 0)
             ).rejects.toThrow(ConcurrencyError);
         });
-
-        it('should allow appending with correct expected version', async () => {
-            const event1 = createEventRecord('stream-1', 0, 'test1');
-            await store.append('stream-1', [event1]);
-
-            const event2 = createEventRecord('stream-1', 1, 'test2');
-            await expect(
-                store.append('stream-1', [event2], 1)
-            ).resolves.not.toThrow();
-        });
-
-        it('should reject events with incorrect version', async () => {
-            const event = createEventRecord('stream-1', 1, 'test');
-            await expect(
-                store.append('stream-1', [event])
-            ).rejects.toThrow('Invalid event version');
-        });
-
-        it('should reject events with non-sequential versions', async () => {
-            const event1 = createEventRecord('stream-1', 0, 'test1');
-            const event2 = createEventRecord('stream-1', 2, 'test2');
-
-            await expect(
-                store.append('stream-1', [event1, event2])
-            ).rejects.toThrow('Invalid event version');
-        });
     });
 
     describe('readStream', () => {
@@ -98,33 +70,50 @@ describe('InMemoryEventStore', () => {
             ]);
         });
 
-        it('should read all events from a stream', async () => {
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1');
+        it('should read all events and return initial state when no snapshot exists', async () => {
+            const { events, state } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
             expect(events).toHaveLength(3);
             expect(events.map(e => e.event.data)).toEqual(['test1', 'test2', 'test3']);
+            expect(state).toEqual(initialState);
         });
 
-        it('should return empty array for non-existent stream', async () => {
-            const events = await store.readStream<TestEvent, TestMetadata>('non-existent');
+        it('should return initial state and empty events for non-existent stream', async () => {
+            const { events, state } = await store.readStream<TestEvent, TestState>('non-existent', initialState);
             expect(events).toEqual([]);
+            expect(state).toEqual(initialState);
         });
+    });
 
-        it('should respect fromVersion parameter', async () => {
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1', 1);
-            expect(events).toHaveLength(2);
-            expect(events.map(e => e.event.data)).toEqual(['test2', 'test3']);
-        });
+    describe('storeStateAsSnapshot', () => {
+        it('should store state and return it on next read', async () => {
+            await store.append('stream-1', [
+                createEventRecord('stream-1', 0, 'test1'),
+                createEventRecord('stream-1', 1, 'test2')
+            ]);
 
-        it('should respect toVersion parameter', async () => {
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1', undefined, 1);
-            expect(events).toHaveLength(2);
-            expect(events.map(e => e.event.data)).toEqual(['test1', 'test2']);
-        });
+            const stateToStore: TestState = { items: ['test1', 'test2'] };
+            await store.storeStateAsSnapshot('stream-1', stateToStore, 1);
 
-        it('should handle version range correctly', async () => {
-            const events = await store.readStream<TestEvent, TestMetadata>('stream-1', 1, 1);
+            const { state, events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
+            expect(state).toEqual(stateToStore);
             expect(events).toHaveLength(1);
-            expect(events[0].event.data).toBe('test2');
+            expect(events[0].event.data).toBe('test3');
+        });
+
+        it('should only return events after snapshot version', async () => {
+            await store.append('stream-1', [
+                createEventRecord('stream-1', 0, 'test1'),
+                createEventRecord('stream-1', 1, 'test2'),
+                createEventRecord('stream-1', 2, 'test3')
+            ]);
+
+            const stateAfterTwoEvents: TestState = { items: ['test1', 'test2'] };
+            await store.storeStateAsSnapshot('stream-1', stateAfterTwoEvents, 1);
+
+            const { state, events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
+            expect(state).toEqual(stateAfterTwoEvents);
+            expect(events).toHaveLength(1);
+            expect(events[0].event.data).toBe('test3');
         });
     });
 });

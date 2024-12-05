@@ -1,57 +1,80 @@
 import { EventStore, ConcurrencyError } from './event-store';
 import { EventRecord } from './types';
 
+interface StoredState<T> {
+    state: T;
+    lastEventApplied: number;
+    timestamp: Date;
+}
+
 /**
  * In-memory implementation of EventStore for testing purposes.
  * Not suitable for production use.
  */
 export class InMemoryEventStore implements EventStore {
-    private readonly streams = new Map<string, EventRecord<unknown, unknown>[]>();
+    private readonly streams = new Map<string, EventRecord<unknown>[]>();
+    private readonly snapshots = new Map<string, StoredState<unknown>>();
 
-    async append<TEvent, TMeta>(
+    async append<TEvent>(
         streamId: string,
-        events: EventRecord<TEvent, TMeta>[],
+        events: EventRecord<TEvent>[],
         expectedVersion?: number
     ): Promise<void> {
         const currentEvents = this.streams.get(streamId) || [];
         const currentVersion = currentEvents.length;
 
-        // Optimistic concurrency check
         if (expectedVersion !== undefined && expectedVersion !== currentVersion) {
             throw new ConcurrencyError(streamId, expectedVersion, currentVersion);
         }
 
-        // Validate event versions
         events.forEach((event, index) => {
             const expectedVersion = currentVersion + index;
-            if (event.version !== expectedVersion) {
+            if (event.metadata.version !== expectedVersion) {
                 throw new Error(
-                    `Invalid event version. Expected ${expectedVersion}, got ${event.version}`
+                    `Invalid event version. Expected ${expectedVersion}, got ${event.metadata.version}`
                 );
             }
         });
 
-        // Append events
         this.streams.set(streamId, [...currentEvents, ...events]);
     }
 
-    async readStream<TEvent, TMeta>(
+    async readStream<TEvent, TState>(
         streamId: string,
-        fromVersion?: number,
-        toVersion?: number
-    ): Promise<EventRecord<TEvent, TMeta>[]> {
-        const events = this.streams.get(streamId) || [];
-        
-        let result = events;
-        
-        if (fromVersion !== undefined) {
-            result = result.filter(event => event.version >= fromVersion);
+        initialState: TState
+    ): Promise<{
+        events: EventRecord<TEvent>[];
+        state: TState;
+    }> {
+        const storedState = this.snapshots.get(streamId) as StoredState<TState> | undefined;
+        const events = this.streams.get(streamId) as EventRecord<TEvent>[] || [];
+
+        if (!storedState) {
+            return {
+                events,
+                state: initialState
+            };
         }
-        
-        if (toVersion !== undefined) {
-            result = result.filter(event => event.version <= toVersion);
-        }
-        
-        return result as EventRecord<TEvent, TMeta>[];
+
+        const eventsAfterSnapshot = events.filter(
+            event => event.metadata.version > storedState.lastEventApplied
+        );
+
+        return {
+            events: eventsAfterSnapshot,
+            state: storedState.state
+        };
+    }
+
+    async storeStateAsSnapshot<TState>(
+        streamId: string,
+        state: TState,
+        lastEventApplied: number
+    ): Promise<void> {
+        this.snapshots.set(streamId, {
+            state,
+            lastEventApplied,
+            timestamp: new Date()
+        });
     }
 }

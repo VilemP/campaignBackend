@@ -11,24 +11,36 @@ export interface EventStore {
      * @param expectedVersion - Optional expected version for optimistic concurrency
      * @throws {ConcurrencyError} If expectedVersion doesn't match current version
      */
-    append<TEvent, TMeta>(
+    append<TEvent>(
         streamId: string,
-        events: EventRecord<TEvent, TMeta>[],
+        events: EventRecord<TEvent>[],
         expectedVersion?: number
     ): Promise<void>;
 
     /**
-     * Read events from a stream
+     * Read events from a stream with optional snapshot
      * @param streamId - ID of the event stream
-     * @param fromVersion - Optional version to start reading from
-     * @param toVersion - Optional version to read until
-     * @returns Array of event records
+     * @param initialState - Initial state to start reading from
      */
-    readStream<TEvent, TMeta>(
+    readStream<TEvent, TState>(
         streamId: string,
-        fromVersion?: number,
-        toVersion?: number
-    ): Promise<EventRecord<TEvent, TMeta>[]>;
+        initialState: TState
+    ): Promise<{
+        events: EventRecord<TEvent>[];
+        state: TState;
+    }>;
+
+    /**
+     * Store a snapshot for a stream
+     * @param streamId - ID of the event stream
+     * @param snapshot - The snapshot data
+     * @param version - Version of the stream this snapshot represents (last event version included)
+     */
+    storeStateAsSnapshot<TState>(
+        streamId: string,
+        state: TState,
+        lastEventApplied: number
+    ): Promise<void>;
 }
 
 /**

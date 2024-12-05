@@ -6,7 +6,7 @@ import { EventRecord, Serializable } from './types';
  * Not suitable for production use.
  */
 export class InMemoryEventStore implements EventStore {
-  private streams = new Map<string, EventRecord<unknown>[]>();
+  private streams = new Map<string, EventRecord<Serializable>[]>();
 
   async append<T extends Serializable>(
     streamId: string,

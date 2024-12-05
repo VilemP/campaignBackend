@@ -1,113 +1,135 @@
-# Campaign Management System
+# Enterprise Monorepo
 
-An event-sourced backend service for campaign management using CQRS principles.
+This is a monorepo powered by Nx build system, hosting enterprise microservices and shared libraries. The repository is structured to promote code reuse while maintaining clear boundaries between different parts of the system.
 
 ## Project Structure
 
 ```
-campaign-management/
-├── apps/
-│   └── campaign-backend/       # Main campaign management service
-│       ├── src/
-│       │   ├── domain/        # Domain model and events
-│       │   ├── infrastructure/# Event sourcing and persistence
-│       │   ├── api/          # HTTP API and validation
-│       │   └── index.ts      # Application entry point
-│       ├── test/
-│       └── project.json
-├── libs/
-│   └── reporting/            # Shared reporting functionality
-│       └── link-builder/     # Campaign link building library
-└── nx.json
+├── apps/                      # Application projects
+│   └── campaign-backend/      # Example: Campaign management service
+├── libs/                      # Shared libraries
+│   ├── api/                  # API related utilities and contracts
+│   ├── event-sourcing/       # Event sourcing infrastructure
+│   └── reporting/           # Reporting and analytics utilities
+├── tools/                    # Development and build tools
+└── nx.json                   # Nx configuration
 ```
 
-## Getting Started
+## Technical Stack
+
+### Core Technologies
+- **Nx**: Monorepo build system providing efficient build orchestration and dependency management
+- **TypeScript**: Primary development language
+- **Vitest**: Modern, ESM-first test runner chosen for its speed and Nx integration
+- **Zod**: Schema validation and type inference
+- **OpenAPI**: API documentation and contract definition
+- **Pact.io**: Consumer-driven contract testing
+
+### Development Tools
+- **pnpm**: Fast, disk space efficient package manager
+- **ESLint**: TypeScript-aware linting
+- **Prettier**: Code formatting
+- **Husky**: Git hooks for code quality
+
+## Library Design Principles
+
+1. **Library Independence**
+   - Libraries should be as independent as possible
+   - Dependencies between libraries should be minimized
+   - Cross-library dependencies must be explicitly documented
+
+2. **Application Dependencies**
+   - Applications should depend on libraries, not other applications
+   - Direct dependencies between applications are discouraged
+   - Use shared libraries for common functionality
+
+3. **Library Categories**
+   - **api**: Contracts, DTOs, and API-related utilities
+   - **event-sourcing**: Event sourcing primitives and infrastructure
+   - **reporting**: Analytics and reporting tools
+   - Consider creating new categories for distinct domains
+
+## Development Workflow
 
 ### Prerequisites
+- Node.js >= 18
+- pnpm >= 8.0
 
-- Node.js 18.17.0 or higher
-- npm 9.x.x
-
-### Installation
-
+### Getting Started
 ```bash
-npm install
-```
+# Install dependencies
+pnpm install
 
-### Development
+# Generate a new library
+nx g @nx/node:lib new-lib-name
 
-```bash
-# Start the development server
-npm run start
+# Generate a new application
+nx g @nx/node:app new-app-name
 
 # Run tests
-npm run test
+nx test lib-name
+nx test app-name
 
-# Run tests with coverage
-npm run test:coverage
+# Build specific project
+nx build project-name
 
-# Run tests in watch mode
-npm run test:watch
-
-# Lint code
-npm run lint
-
-# Format code
-npm run format
+# Run affected tests
+nx affected:test
 ```
 
-### Project Graph
+## Testing Strategy
 
-To visualize the project dependency graph:
+We use Vitest as our primary testing framework for:
+- Fast execution with native ESM support
+- Watch mode with instant feedback
+- Seamless Nx integration
+- Built-in coverage reporting
 
+### Contract Testing
+Contract testing with Pact.io ensures API compatibility:
 ```bash
-npm run graph
+# Run contract tests
+nx run-many --target=pact
+
+# Verify contracts
+nx run-many --target=pact-verify
 ```
 
-## Testing
+## Creating New Libraries
 
-The project uses Vitest for testing and includes:
-- Unit tests
-- Integration tests
-- Contract tests (Pact.io)
+When creating a new library:
+1. Identify the appropriate category
+2. Use Nx generators for consistency
+3. Document public API
+4. Include README.md with usage examples
+5. Add appropriate test coverage
 
-### Running Contract Tests
-
+Example:
 ```bash
-npm run test:pact
+# Generate new library in the api category
+nx g @nx/node:lib my-feature --directory=libs/api/my-feature
+
+# Generate new library in a new category
+nx g @nx/node:lib my-feature --directory=libs/new-category/my-feature
 ```
 
-## Architecture
+## Deployment
 
-### Event Sourcing
+Projects support multiple deployment strategies:
 
-The system uses event sourcing for state management:
-- All state changes are captured as events
-- Events are the source of truth
-- State is reconstructed from event stream
+### Container-based
+- Multi-stage Dockerfile provided
+- Docker Compose for local development
+- Kubernetes configurations available
 
-### CQRS
+### Serverless
+- AWS Lambda compatible
+- Serverless Framework configurations
+- API Gateway integration
 
-The system follows Command Query Responsibility Segregation:
-- Commands modify state
-- Queries read state
-- Separate models for reading and writing
+## Further Reading
 
-### Domain-Driven Design
-
-The project structure follows DDD principles:
-- Rich domain model
-- Bounded contexts
-- Aggregates and entities
-- Domain events
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Run tests and linting
-4. Create a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details
+- [Library Development Guide](./docs/lib-development.md)
+- [Application Development Guide](./docs/app-development.md)
+- [Testing Best Practices](./docs/testing.md)
+- [Deployment Guide](./docs/deployment.md)

@@ -1,19 +1,18 @@
-import { describe, it, expect, vi } from 'vitest';
-import { CampaignRepository } from './CampaignRepository';
-import { EventStore, EventCollector, SnapshotStore } from '@campaign/event-sourcing';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { EventStore, EventCollector } from '@libs/event-sourcing';
 import { Campaign } from '../../domain/model/Campaign';
 import { BusinessType } from '../../domain/model/types';
+import { EventSourcedCampaignState } from './EventSourcedCampaignState';
+import { EventSourcedCampaignRepository } from './EventSourcedCampaignRepository';
 
-describe('CampaignRepository', () => {
+describe('EventSourcedCampaignRepository', () => {
     const mockEventStore: EventStore = {
-        saveEvents: vi.fn(),
-        getEvents: vi.fn(),
-        getLastVersion: vi.fn()
-    };
-
-    const mockSnapshotStore: SnapshotStore = {
-        saveSnapshot: vi.fn(),
-        getLatestSnapshot: vi.fn()
+        append: vi.fn(),
+        readStream: vi.fn().mockResolvedValue({
+            events: [],
+            state: EventSourcedCampaignState.empty()
+        }),
+        storeStateAsSnapshot: vi.fn()
     };
 
     const eventCollector = new EventCollector();
@@ -23,12 +22,12 @@ describe('CampaignRepository', () => {
     });
 
     it('should save new campaign events', async () => {
-        const repository = new CampaignRepository(mockEventStore, mockSnapshotStore, eventCollector);
+        const repository = new EventSourcedCampaignRepository(mockEventStore);
         const campaign = Campaign.create('123', 'Test Campaign', BusinessType.RETAIL);
         
         await repository.save(campaign);
 
-        expect(mockEventStore.saveEvents).toHaveBeenCalled();
+        expect(mockEventStore.append).toHaveBeenCalled();
     });
 
     // More tests to be added

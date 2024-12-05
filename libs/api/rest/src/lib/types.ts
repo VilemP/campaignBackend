@@ -1,9 +1,14 @@
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export interface CommandConstructor<TPayload> {
-    new (payload: TPayload, ...deps: any[]): {
-        execute(): Promise<void>;
-    };
+export interface Link {
+    href: string;
+    rel: string;
+    method: HttpMethod;
+}
+
+export interface ResourceResponse<T = unknown> {
+    data: T;
+    links: Link[];
 }
 
 export interface HttpResponse {
@@ -12,6 +17,13 @@ export interface HttpResponse {
         'application/json': {
             schema: unknown;
         };
+    };
+    links?: Link[];
+}
+
+export interface CommandConstructor<TPayload> {
+    new (payload: TPayload, ...deps: any[]): {
+        execute(): Promise<void>;
     };
 }
 

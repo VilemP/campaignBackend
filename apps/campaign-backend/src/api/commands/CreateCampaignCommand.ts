@@ -1,16 +1,13 @@
 import { Schema } from '@libs/validation';
 import { Command } from '@libs/cqrs';
-import type { HttpEndpoint } from '@libs/api-rest';
-
-interface CampaignData {
-    name: string;
-    businessType: 'RETAIL' | 'ECOMMERCE' | 'SERVICE';
-}
+import { HttpEndpoint } from "@libs/api-rest"
 
 const schema = Schema.input(Schema.object({
     name: Schema.string().min(3).max(100),
     businessType: Schema.enum(['RETAIL', 'ECOMMERCE', 'SERVICE'])
 }));
+
+type CampaignData = (typeof schema)['type'];
 
 export class CreateCampaignCommand implements Command {
     constructor(

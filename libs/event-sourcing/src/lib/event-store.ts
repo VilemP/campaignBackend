@@ -29,12 +29,6 @@ export interface EventStore {
     fromVersion?: number,
     toVersion?: number
   ): Promise<EventRecord<T>[]>;
-
-  /**
-   * Delete all events for a stream
-   * @param streamId - ID of the event stream
-   */
-  deleteStream(streamId: string): Promise<void>;
 }
 
 /**

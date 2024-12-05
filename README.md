@@ -15,6 +15,9 @@ This is a monorepo powered by Nx build system, hosting enterprise microservices 
 └── nx.json                   # Nx configuration
 ```
 
+### Applications
+- [Campaign Management Backend](./apps/campaign-backend/README.md) - Event-sourced campaign management service
+
 ## Technical Stack
 
 ### Core Technologies

@@ -10,7 +10,7 @@ export class EventSourcedCampaignState implements CampaignState {
         readonly businessType: BusinessType
     ) {}
 
-    static empty(): EventSourcedCampaignState {
+    static initial(): EventSourcedCampaignState {
         return new EventSourcedCampaignState('', '', BusinessType.RETAIL);
     }
 

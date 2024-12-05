@@ -48,10 +48,10 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
     async load(id: string): Promise<Campaign | null> {
         const { events, state } = await this.eventStore.readStream<DomainEvent, CampaignState>(
             id,
-            EventSourcedCampaignState.empty()
+            EventSourcedCampaignState.initial()
         );
 
-        if (events.length === 0 && state === EventSourcedCampaignState.empty()) {
+        if (events.length === 0 && state === EventSourcedCampaignState.initial()) {
             return null;
         }
 

@@ -10,7 +10,7 @@ describe('EventSourcedCampaignRepository', () => {
         append: vi.fn(),
         readStream: vi.fn().mockResolvedValue({
             events: [],
-            state: EventSourcedCampaignState.empty()
+            state: EventSourcedCampaignState.initial()
         }),
         storeStateAsSnapshot: vi.fn()
     };

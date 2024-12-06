@@ -1,13 +1,28 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": [],
-  "include": [],
+  "include": ["src/**/*.ts"],
+  "files": ["src/main.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "../../libs/rest-api"
+    },
+    {
+      "path": "../../libs/cqrs"
+    },
+    {
+      "path": "../../libs/domain"
+    },
+    {
+      "path": "../../libs/event-sourcing"
+    },
+    {
+      "path": "../../libs/validation"
     }
   ],
   "compilerOptions": {

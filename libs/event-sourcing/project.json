@@ -5,13 +5,15 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/event-sourcing",
         "main": "libs/event-sourcing/src/index.ts",
-        "tsConfig": "libs/event-sourcing/tsconfig.json",
-        "assets": ["libs/event-sourcing/*.md"]
+        "tsConfig": "libs/event-sourcing/tsconfig.lib.json",
+        "assets": ["libs/event-sourcing/*.md"],
+        "buildLibsFromSource": true,
+        "minify": false
       }
     },
     "test": {
@@ -21,7 +23,14 @@
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/libs/event-sourcing"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/event-sourcing/**/*.ts"]
+      }
     }
   },
-  "tags": ["type:util", "scope:shared", "layer:infrastructure"]
+  "tags": []
 }

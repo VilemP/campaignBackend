@@ -11,4 +11,4 @@ export type ResourceType = string;
 export interface ResourceTypeProvider {
     getSupportedResourceTypes(): ResourceType[];
     buildLink(type: ResourceType, params: Record<string, string>): ResourceLink;
-}
+} 

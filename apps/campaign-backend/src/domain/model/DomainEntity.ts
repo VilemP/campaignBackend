@@ -1,5 +1,5 @@
 import { EventEmitter } from '@libs/event-sourcing';
-import { DomainEvent } from '../events/DomainEvent';
+import { DomainEvent } from '@libs/domain';
 
 export abstract class DomainEntity implements EventEmitter<DomainEvent> {
     private listeners: Array<(event: DomainEvent) => void> = [];

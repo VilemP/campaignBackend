@@ -4,12 +4,14 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["vitest", "node"],
-    "composite": true
+    "composite": true,
+    "rootDir": "."
   },
   "include": [
-    "vite.config.ts",
+    "vitest.config.ts",
     "src/**/*.ts",
+    "src/**/*.spec.ts",
     "src/**/*.test.ts",
-    "src/**/*.spec.ts"
+    "src/**/*.d.ts"
   ]
 } 

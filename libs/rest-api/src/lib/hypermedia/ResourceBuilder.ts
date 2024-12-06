@@ -13,4 +13,4 @@ export abstract class BaseResourceBuilder implements ResourceTypeProvider {
         }
         return url;
     }
-}
+} 

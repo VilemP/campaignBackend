@@ -1,0 +1,36 @@
+{
+  "name": "rest-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rest-api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/rest-api",
+        "main": "libs/rest-api/src/index.ts",
+        "tsConfig": "libs/rest-api/tsconfig.lib.json",
+        "assets": ["libs/rest-api/*.md"],
+        "buildLibsFromSource": true,
+        "minify": false
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/rest-api"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/rest-api/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

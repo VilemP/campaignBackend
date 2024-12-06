@@ -1,0 +1,52 @@
+[1mdiff --git a/package.json b/package.json[m
+[1mindex e162dcb..773e6b9 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -35,12 +35,18 @@[m
+     "zod": "^3.22.4"[m
+   },[m
+   "devDependencies": {[m
+[31m-    "@nx/eslint": "18.0.5",[m
+[31m-    "@nx/js": "18.0.5",[m
+[31m-    "@nx/node": "18.0.5",[m
+[31m-    "@nx/vite": "18.0.5",[m
+[31m-    "@nx/workspace": "18.0.5",[m
+[32m+[m[32m    "@nx/eslint": "20.2.0",[m
+[32m+[m[32m    "@nx/eslint-plugin": "20.2.0",[m
+[32m+[m[32m    "@nx/js": "20.2.0",[m
+[32m+[m[32m    "@nx/node": "20.2.0",[m
+[32m+[m[32m    "@nx/vite": "20.2.0",[m
+[32m+[m[32m    "@nx/web": "20.2.0",[m
+[32m+[m[32m    "@nx/webpack": "20.2.0",[m
+[32m+[m[32m    "@nx/workspace": "20.2.0",[m
+     "@pact-foundation/pact": "^13.2.0",[m
+[32m+[m[32m    "@swc-node/register": "~1.9.1",[m
+[32m+[m[32m    "@swc/core": "~1.5.7",[m
+[32m+[m[32m    "@swc/helpers": "~0.5.11",[m
+     "@types/express": "^4.17.21",[m
+     "@types/node": "^20.11.25",[m
+     "@typescript-eslint/eslint-plugin": "^7.1.1",[m
+[36m@@ -48,14 +54,18 @@[m
+     "@vitest/coverage-v8": "^1.3.1",[m
+     "@vitest/ui": "^1.3.1",[m
+     "eslint": "^8.57.0",[m
+[31m-    "nx": "18.0.5",[m
+[32m+[m[32m    "glob": "^10.3.10",[m
+[32m+[m[32m    "husky": "^9.0.11",[m
+[32m+[m[32m    "jsdom": "~22.1.0",[m
+[32m+[m[32m    "nx": "20.2.0",[m
+[32m+[m[32m    "prettier": "^2.6.2",[m
+[32m+[m[32m    "rimraf": "^5.0.5",[m
+[32m+[m[32m    "tslib": "^2.3.0",[m
+     "typescript": "^5.4.2",[m
+     "vite": "^5.1.5",[m
+[32m+[m[32m    "vite-plugin-dts": "~3.8.1",[m
+     "vite-tsconfig-paths": "^4.3.1",[m
+[31m-    "vitest": "^1.3.1",[m
+[31m-    "husky": "^9.0.11",[m
+[31m-    "rimraf": "^5.0.5",[m
+[31m-    "glob": "^10.3.10"[m
+[32m+[m[32m    "vitest": "^1.3.1"[m
+   },[m
+   "overrides": {[m
+     "glob": "^10.3.10",[m

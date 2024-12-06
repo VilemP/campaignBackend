@@ -1,6 +1,7 @@
-import { HttpEndpoint } from './types';
+
+import { CommandHttpEndpoint } from '@libs/rest-api';
 import { endpoint as createCampaign } from '../commands/CreateCampaignCommand';
 
-export const endpoints: HttpEndpoint[] = [
+export const endpoints: CommandHttpEndpoint[] = [
     createCampaign
 ];

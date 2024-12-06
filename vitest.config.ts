@@ -1,11 +1,15 @@
-/// <reference types="vitest" />
+/// <reference types='vitest' />
 import { defineConfig } from 'vite';
-import { getViteConfig } from '@nx/vite/plugins/vite-config';
 
 export default defineConfig({
-  ...getViteConfig(),
   test: {
     globals: true,
+    pool: 'forks',
+    poolOptions: {
+      threads: {
+        singleThread: false
+      }
+    },
     cache: {
       dir: './node_modules/.vitest'
     },

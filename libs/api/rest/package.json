@@ -1,5 +1,0 @@
-{
-  "name": "@libs/api-rest",
-  "version": "1.0.0",
-  "main": "src/lib/index.ts"
-} 

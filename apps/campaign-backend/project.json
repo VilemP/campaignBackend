@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/node:webpack",
+      "executor": "@nx/vite:build",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -13,20 +13,18 @@
         "outputPath": "dist/apps/campaign-backend",
         "main": "apps/campaign-backend/src/main.ts",
         "tsConfig": "apps/campaign-backend/tsconfig.app.json",
-        "assets": [
-          "apps/campaign-backend/src/assets"
-        ]
+        "platform": "node"
       },
       "configurations": {
         "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false
+          "mode": "production",
+          "sourcemap": false,
+          "minify": true
         }
       }
     },
     "serve": {
-      "executor": "@nx/node:node",
+      "executor": "@nx/vite:dev-server",
       "options": {
         "buildTarget": "campaign-backend:build"
       }

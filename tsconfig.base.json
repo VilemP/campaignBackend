@@ -1,18 +1,28 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
     "moduleResolution": "node",
-    "target": "es2021",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
     "paths": {
-      "@libs/validation": ["libs/validation/src/lib"],
-      "@libs/validation/*": ["libs/validation/src/lib/*"],
-      "@libs/cqrs": ["libs/cqrs/src/lib"],
-      "@libs/api-rest": ["libs/api/rest/src/index.ts"],
-      "@libs/event-sourcing": ["libs/event-sourcing/src/index.ts"],
-      "@libs/reporting-link-builder": ["libs/reporting/link-builder/src/index.ts"],
-      "@libs/domain": ["libs/domain/src/index.ts"],
-      "@libs/errors": ["libs/errors/src/index.ts"]
+      "@campaign-backend/*": ["apps/campaign-backend/src/*"],
+      "@libs/cqrs": ["libs/cqrs/src"],
+      "@libs/domain": ["libs/domain/src"],
+      "@libs/errors": ["libs/errors/src"],
+      "@libs/event-sourcing": ["libs/event-sourcing/src"],
+      "@libs/rest-api": ["libs/rest-api/src"],
+      "@libs/validation": ["libs/validation/src"]
     }
-  }
+  },
+  "exclude": ["node_modules", "tmp"]
 }

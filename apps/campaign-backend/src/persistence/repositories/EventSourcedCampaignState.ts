@@ -1,6 +1,6 @@
 import { BusinessType } from '../../domain/model/types';
 import { CampaignState } from '../../domain/model/CampaignState';
-import { DomainEvent } from '../../domain/events/DomainEvent';
+import { DomainEvent } from '@libs/domain';
 import { CampaignCreated, CampaignBusinessTypeChanged } from '../../domain/events/CampaignEvents';
 
 export class EventSourcedCampaignState implements CampaignState {

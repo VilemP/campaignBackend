@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { IInputSchema, IOutputSchema } from './contracts';
 
 export class ValidationError extends Error {
     constructor(message: string, public readonly errors: z.ZodError) {
@@ -7,7 +8,7 @@ export class ValidationError extends Error {
     }
 }
 
-export class InputSchema<T> {
+export class InputSchema<T> implements IInputSchema<T> {
     constructor(private readonly zodSchema: z.ZodType<T>) {}
     
     readonly type!: T;
@@ -37,7 +38,7 @@ export class InputSchema<T> {
     }
 }
 
-export class OutputSchema<T> {
+export class OutputSchema<T> implements IOutputSchema<T> {
     constructor(private readonly zodSchema: z.ZodType<T>) {}
     
     readonly type!: T;

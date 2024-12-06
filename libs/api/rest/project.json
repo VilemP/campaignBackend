@@ -31,5 +31,5 @@
       }
     }
   },
-  "tags": ["type:lib", "scope:shared"]
+  "tags": ["type:util", "scope:shared", "layer:infrastructure"]
 }

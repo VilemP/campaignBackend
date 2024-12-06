@@ -1,17 +1,17 @@
 {
-  "name": "errors",
+  "name": "validation",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/errors/src",
+  "sourceRoot": "libs/validation/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/errors",
-        "main": "libs/errors/src/index.ts",
-        "tsConfig": "libs/errors/tsconfig.json",
-        "assets": ["libs/errors/*.md"]
+        "outputPath": "dist/libs/validation",
+        "main": "libs/validation/src/index.ts",
+        "tsConfig": "libs/validation/tsconfig.json",
+        "assets": ["libs/validation/*.md"]
       }
     },
     "test": {
@@ -19,7 +19,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/libs/errors"
+        "reportsDirectory": "../../coverage/libs/validation"
       }
     }
   },

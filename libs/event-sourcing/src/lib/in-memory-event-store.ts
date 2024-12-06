@@ -1,5 +1,6 @@
 import { EventStore, ConcurrencyError } from './event-store';
 import { EventRecord } from './types';
+import { EventStoreReadError, EventStoreWriteError } from './errors';
 
 interface StoredState<T> {
     state: T;
@@ -20,23 +21,33 @@ export class InMemoryEventStore implements EventStore {
         events: EventRecord<TEvent>[],
         expectedVersion?: number
     ): Promise<void> {
-        const currentEvents = this.streams.get(streamId) || [];
-        const currentVersion = currentEvents.length;
+        try {
+            const currentEvents = this.streams.get(streamId) || [];
+            const currentVersion = currentEvents.length;
 
-        if (expectedVersion !== undefined && expectedVersion !== currentVersion) {
-            throw new ConcurrencyError(streamId, expectedVersion, currentVersion);
-        }
-
-        events.forEach((event, index) => {
-            const expectedVersion = currentVersion + index;
-            if (event.metadata.version !== expectedVersion) {
-                throw new Error(
-                    `Invalid event version. Expected ${expectedVersion}, got ${event.metadata.version}`
-                );
+            if (expectedVersion !== undefined && expectedVersion !== currentVersion) {
+                throw new ConcurrencyError(streamId, expectedVersion, currentVersion);
             }
-        });
 
-        this.streams.set(streamId, [...currentEvents, ...events]);
+            for (const [index, event] of events.entries()) {
+                const expectedVersion = currentVersion + index;
+                if (event.metadata.version !== expectedVersion) {
+                    throw new EventStoreWriteError(streamId, new Error(
+                        `Invalid event version. Expected ${expectedVersion}, got ${event.metadata.version}`
+                    ));
+                }
+            }
+
+            this.streams.set(streamId, [...currentEvents, ...events]);
+        } catch (error) {
+            if (error instanceof ConcurrencyError) {
+                throw error;
+            }
+            if (error instanceof EventStoreWriteError) {
+                throw error;
+            }
+            throw new EventStoreWriteError(streamId, error as Error);
+        }
     }
 
     async readStream<TEvent, TState>(
@@ -46,24 +57,25 @@ export class InMemoryEventStore implements EventStore {
         events: EventRecord<TEvent>[];
         state: TState;
     }> {
-        const storedState = this.snapshots.get(streamId) as StoredState<TState> | undefined;
-        const events = this.streams.get(streamId) as EventRecord<TEvent>[] || [];
+        try {
+            const storedState = this.snapshots.get(streamId) as StoredState<TState> | undefined;
+            const events = this.streams.get(streamId) as EventRecord<TEvent>[] || [];
 
-        if (!storedState) {
+            if (!storedState) {
+                return { events, state: initialState };
+            }
+
+            const eventsAfterSnapshot = events.filter(
+                event => event.metadata.version > storedState.lastEventApplied
+            );
+
             return {
-                events,
-                state: initialState
+                events: eventsAfterSnapshot,
+                state: storedState.state
             };
+        } catch (error) {
+            throw new EventStoreReadError(streamId, error as Error);
         }
-
-        const eventsAfterSnapshot = events.filter(
-            event => event.metadata.version > storedState.lastEventApplied
-        );
-
-        return {
-            events: eventsAfterSnapshot,
-            state: storedState.state
-        };
     }
 
     async storeStateAsSnapshot<TState>(
@@ -71,10 +83,14 @@ export class InMemoryEventStore implements EventStore {
         state: TState,
         lastEventApplied: number
     ): Promise<void> {
-        this.snapshots.set(streamId, {
-            state,
-            lastEventApplied,
-            timestamp: new Date()
-        });
+        try {
+            this.snapshots.set(streamId, {
+                state,
+                lastEventApplied,
+                timestamp: new Date()
+            });
+        } catch (error) {
+            throw new EventStoreWriteError(streamId, error as Error);
+        }
     }
 }

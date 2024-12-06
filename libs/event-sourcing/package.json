@@ -1,8 +1,4 @@
 {
   "name": "@libs/event-sourcing",
-  "version": "1.0.0",
-  "dependencies": {
-    "@libs/domain": "0.0.1",
-    "@libs/errors": "1.0.0"
-  }
+  "version": "1.0.0"
 }

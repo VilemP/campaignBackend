@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -8,18 +9,13 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
   },
   "include": ["src/**/*.ts"],
   "references": [
-    {
-      "path": "../domain"
-    },
-    {
-      "path": "../errors"
-    }
+    { "path": "../domain" },
+    { "path": "../errors" }
   ]
 }

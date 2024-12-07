@@ -7,13 +7,8 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "composite": true,
-    "rootDir": "src"
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*.ts"],
-  "references": [
-    { "path": "./tsconfig.lib.json" },
-    { "path": "./tsconfig.spec.json" }
-  ]
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts"]
 }

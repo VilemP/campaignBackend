@@ -10,19 +10,18 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts"],
+  "files": ["src/index.ts"],  // Explicitly list the entry point
+  "include": [
+    "src/**/*.ts",
+    "src/lib/**/*.ts"  // Explicitly include lib directory
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "vite.config.ts"
+  ],
   "references": [
-    {
-      "path": "../domain/tsconfig.lib.json"
-    },
-    {
-      "path": "../errors/tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
+    { "path": "../domain" },
+    { "path": "../errors" }
   ]
 }

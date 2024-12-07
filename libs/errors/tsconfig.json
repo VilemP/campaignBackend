@@ -10,9 +10,14 @@
     "noFallthroughCasesInSwitch": true,
     "composite": true
   },
-  "include": ["src/**/*.ts"],
-  "references": [
-    { "path": "./tsconfig.lib.json" },
-    { "path": "./tsconfig.spec.json" }
+  "files": ["src/index.ts"],  // Explicitly list the entry point
+  "include": [
+    "src/**/*.ts",
+    "src/lib/**/*.ts"  // Explicitly include lib directory
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "vite.config.ts"
   ]
 } 

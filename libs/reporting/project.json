@@ -1,0 +1,30 @@
+{
+  "name": "reporting",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/reporting/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/reporting",
+        "main": "libs/reporting/src/index.ts",
+        "tsConfig": "libs/reporting/tsconfig.lib.json",
+        "assets": ["libs/reporting/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/reporting"
+      }
+    }
+  },
+  "tags": ["type:util", "scope:shared", "layer:infrastructure"]
+}

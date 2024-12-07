@@ -1,31 +1,20 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/**/*.ts"],
-  "files": ["src/main.ts"],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "../../libs/rest-api"
-    },
-    {
-      "path": "../../libs/cqrs"
-    },
-    {
-      "path": "../../libs/domain"
-    },
-    {
-      "path": "../../libs/event-sourcing"
-    },
-    {
-      "path": "../../libs/validation"
-    }
-  ],
   "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true
-  }
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.spec.json" }
+  ]
 }

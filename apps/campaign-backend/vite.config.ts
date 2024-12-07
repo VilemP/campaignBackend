@@ -1,6 +1,10 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/campaign-backend',
@@ -9,9 +13,13 @@ export default defineConfig({
     target: 'node18',
     ssr: true,
     rollupOptions: {
-      input: 'apps/campaign-backend/src/main.ts',
+      input: join(__dirname, 'src/main.ts'),
+      external: ['express'],
       output: {
-        format: 'esm'
+        format: 'esm',
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name][extname]'
       }
     }
   },

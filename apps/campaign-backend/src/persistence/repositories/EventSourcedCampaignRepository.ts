@@ -4,8 +4,7 @@ import { CampaignRepository } from './CampaignRepository';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState';
 import { CampaignState } from '../../domain/model/CampaignState';
-import { CampaignNotFoundError, UntrackedCampaignError, CampaignPersistenceError } from '../errors';
-
+import { UntrackedCampaignError, CampaignPersistenceError } from '../errors';
 const SNAPSHOT_INTERVAL = 100;
 
 export class EventSourcedCampaignRepository implements CampaignRepository {

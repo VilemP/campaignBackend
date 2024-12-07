@@ -29,6 +29,9 @@ export class EventSourcedCampaignState implements CampaignState {
     }
 
     applyEvents(events: DomainEvent[]): EventSourcedCampaignState {
-        return events.reduce((state, event) => state.applyEvent(event), this);
+        return events.reduce<EventSourcedCampaignState>(
+            (state, event) => state.applyEvent(event), 
+            this
+        );
     }
 } 

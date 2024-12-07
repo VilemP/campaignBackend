@@ -10,15 +10,15 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/campaign-backend',
   plugins: [nxViteTsPaths()],
   build: {
-    target: 'node20',
+    target: 'es2020',
     ssr: true,
     rollupOptions: {
       input: join(__dirname, 'src/main.ts'),
       external: ['express'],
       output: {
-        format: 'esm',
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
+        format: 'module',  // More explicit ESM
+        entryFileNames: '[name].mjs',  // .mjs extension for clarity
+        chunkFileNames: '[name].mjs',
         assetFileNames: '[name][extname]'
       }
     }

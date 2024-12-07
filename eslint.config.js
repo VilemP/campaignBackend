@@ -2,6 +2,7 @@ import nxPlugin from '@nx/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import js from '@eslint/js';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
@@ -53,7 +54,8 @@ export default [
         it: true,
         expect: true,
         beforeEach: true,
-        afterEach: true
+        afterEach: true,
+        ...globals
       }
     },
     rules: {

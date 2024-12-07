@@ -1,10 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/campaign-backend',
@@ -13,11 +10,11 @@ export default defineConfig({
     target: 'es2020',
     ssr: true,
     rollupOptions: {
-      input: join(__dirname, 'src/main.ts'),
+      input: resolve(__dirname, 'src/main.ts'),
       external: ['express'],
       output: {
-        format: 'module',  // More explicit ESM
-        entryFileNames: '[name].mjs',  // .mjs extension for clarity
+        format: 'module',
+        entryFileNames: '[name].mjs',
         chunkFileNames: '[name].mjs',
         assetFileNames: '[name][extname]'
       }

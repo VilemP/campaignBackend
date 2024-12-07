@@ -27,18 +27,5 @@ export default defineConfig({
     },
     outDir: '../../dist/libs/reporting',
     reportCompressedSize: true
-  },
-  test: {
-    globals: true,
-    cache: {
-      dir: '../../node_modules/.vitest'
-    },
-    environment: 'node',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    reporters: ['default'],
-    coverage: {
-      reportsDirectory: '../../coverage/libs/reporting',
-      provider: 'v8'
-    }
   }
 });

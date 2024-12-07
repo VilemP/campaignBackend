@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/libs/reporting',
@@ -14,7 +17,7 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: 'src/index.ts',
+      entry: join(__dirname, 'src/index.ts'),
       name: 'reporting',
       fileName: 'index',
       formats: ['es', 'cjs']

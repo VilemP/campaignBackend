@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Entity } from './entity';
+import { Entity } from './entity.js';
 
 class TestEntity extends Entity<string> {}
 

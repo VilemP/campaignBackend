@@ -1,4 +1,4 @@
-import { LinkBuilder, ResourceTypeProvider } from '../types';
+import { LinkBuilder, ResourceTypeProvider } from '../types.js';
 
 export class ComposedLinkBuilder implements LinkBuilder {
     private readonly resourceBuilders = new Map<string, ResourceTypeProvider>();

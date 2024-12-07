@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IInputSchema, IOutputSchema } from './contracts';
+import { IInputSchema, IOutputSchema } from './contracts.js';
 
 export class ValidationError extends Error {
     constructor(message: string, public readonly errors: z.ZodError) {

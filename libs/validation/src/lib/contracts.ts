@@ -1,4 +1,4 @@
-import { ValidationError } from './schema';
+import { ValidationError } from './schema.js';
 
 export interface ValidationResult<T> {
     success: boolean;

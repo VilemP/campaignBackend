@@ -32,6 +32,7 @@ export default defineConfig({
       transformMixedEsModules: true,
       extensions: ['.js', '.ts']
     },
-    outDir: '../../dist/libs/cqrs',
+    outDir: join(__dirname, '../../dist/libs/cqrs'),
+    emptyOutDir: true
   }
 });

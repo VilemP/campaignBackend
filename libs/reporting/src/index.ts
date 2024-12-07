@@ -1,1 +1,1 @@
-export * from './lib/link-builder';
+export * from './lib/link-builder/index.js';

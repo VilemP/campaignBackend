@@ -1,4 +1,4 @@
-import { ResourceLink, ResourceType, ResourceTypeProvider } from './Types';
+import { ResourceLink, ResourceType, ResourceTypeProvider } from './Types.js';
 
 export abstract class BaseResourceBuilder implements ResourceTypeProvider {
     constructor(protected readonly baseUrl: string) {}

@@ -22,7 +22,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/libs/cqrs"
+        "reportsDirectory": "coverage/libs/cqrs"
       }
     }
   },

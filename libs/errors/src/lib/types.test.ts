@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ClientError } from './types';
+import { ClientError } from './types.js';
 
 describe('ClientError', () => {
     it('should have correct error properties', () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { InMemoryEventStore } from './in-memory-event-store';
-import { EventRecord } from './types';
-import { ConcurrencyError } from './event-store';
+import { InMemoryEventStore } from './in-memory-event-store.js';
+import { EventRecord } from './types.js';
+import { ConcurrencyError } from './event-store.js';
 
 interface TestEvent {
     data: string;

@@ -1,6 +1,6 @@
-import { EventStore, ConcurrencyError } from './event-store';
-import { EventRecord } from './types';
-import { EventStoreReadError, EventStoreWriteError } from './errors';
+import { EventStore, ConcurrencyError } from './event-store.js';
+import { EventRecord } from './types.js';
+import { EventStoreReadError, EventStoreWriteError } from './errors.js';
 
 interface StoredState<T> {
     state: T;

@@ -1,8 +1,8 @@
 /**
  * Base class for domain objects that have a unique identity.
  */
-import { DomainEvent } from './domain-event';
-import { DomainEventEmitter } from './domain-event-emitter';
+import { DomainEvent } from './domain-event.js';
+import { DomainEventEmitter } from './domain-event-emitter.js';
 
 export abstract class Entity<TId> implements DomainEventEmitter {
     private listeners: Array<(event: DomainEvent) => void> = [];

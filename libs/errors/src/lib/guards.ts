@@ -1,4 +1,4 @@
-import { ClientError, InternalError } from './types';
+import { ClientError, InternalError } from './types.js';
 
 export function isClientError(error: unknown): error is ClientError {
     return (

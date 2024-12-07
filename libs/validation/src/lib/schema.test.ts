@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ValidationError } from './schema';
+import { ValidationError } from './schema.js';
 import { z } from 'zod';
 
 describe('ValidationError', () => {

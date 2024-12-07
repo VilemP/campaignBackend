@@ -1,7 +1,8 @@
 
-import { CommandHttpEndpoint } from '@libs/rest-api';
-import { endpoint as createCampaign } from '../commands/CreateCampaignCommand';
+import { endpoint as createCampaignEndpoint } from '../commands/CreateCampaignCommand';
 
-export const endpoints: CommandHttpEndpoint[] = [
-    createCampaign
+
+// Allow different payloads and deps while maintaining type safety
+export const endpoints = [
+    createCampaignEndpoint
 ];

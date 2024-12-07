@@ -10,7 +10,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/campaign-backend',
   plugins: [nxViteTsPaths()],
   build: {
-    target: 'node18',
+    target: 'node20',
     ssr: true,
     rollupOptions: {
       input: join(__dirname, 'src/main.ts'),

@@ -23,6 +23,10 @@ export class Campaign extends Entity<string> {
         return new Campaign(state.id, state.name, state.businessType);
     }
 
+    getName(): string {
+        return this.name;
+    }
+
     getId(): string {
         return this.id;
     }

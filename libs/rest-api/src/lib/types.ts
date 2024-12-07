@@ -36,6 +36,10 @@ export interface HttpResponse {
     links?: Link[];
 }
 
+export interface HttpRequest {
+    body: unknown;
+}
+
 export interface ResponseCategory {
     code: number;
     response: HttpResponse;
@@ -47,21 +51,22 @@ export interface ResponseDefinition {
     serverErrors: ResponseCategory[];
 }
 
-export interface Command {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export interface Command<TPayload> {
     execute(): Promise<void>;
 }
 
-export interface CommandConstructor<TPayload> {
-    new (payload: TPayload, ...deps: any[]): Command;
+export interface CommandConstructor<T extends Command<TPayload>, TPayload, TDeps = unknown> {
+    new(payload: TPayload, deps: TDeps): T;
 }
 
-export interface CommandHttpEndpoint<TCommand extends Command = Command, TPayload = unknown> {
+export interface CommandHttpEndpoint<TPayload, TDeps = unknown> {
     method: HttpMethod;
     path: string;
-    command: new (payload: TPayload, ...deps: any[]) => TCommand;
+    command: CommandConstructor<Command<TPayload>, TPayload, TDeps>;
     schema: InputSchema<TPayload>;
     responses: ResponseDefinition;
-    createPayload(req: any): TPayload;
+    createPayload(req: HttpRequest): TPayload;
     summary?: string;
     tags?: string[];
 }

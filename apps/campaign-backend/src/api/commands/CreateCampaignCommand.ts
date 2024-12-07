@@ -1,6 +1,5 @@
 import { Schema } from '@libs/validation';
-import { Command } from '@libs/cqrs';
-import { CommandHttpEndpoint } from '@libs/rest-api';
+import { Command, CommandHttpEndpoint, HttpRequest } from '@libs/rest-api';
 import { Campaign } from '../../domain/model/Campaign';
 import { BusinessType } from '../../domain/model/types';
 import { CampaignRepository } from '../../persistence/repositories/CampaignRepository';
@@ -12,7 +11,7 @@ const schema = Schema.input(Schema.object({
 
 type CampaignData = (typeof schema)['type'];
 
-export class CreateCampaignCommand implements Command {
+export class CreateCampaignCommand implements Command<CampaignData> {
     constructor(
         private readonly payload: CampaignData,
         private readonly repository: CampaignRepository
@@ -24,13 +23,14 @@ export class CreateCampaignCommand implements Command {
         const campaign = Campaign.create(
             Math.random().toString(36).substring(2, 15),
             this.payload.name,
-            BusinessType[this.payload.businessType]
+            this.payload.businessType as BusinessType
         );
         
         await this.repository.save(campaign);
     }
 }
-export const endpoint: CommandHttpEndpoint<CreateCampaignCommand, CampaignData> = {
+
+export const endpoint: CommandHttpEndpoint<CampaignData, CampaignRepository> = {
     method: 'POST',
     path: '/campaigns',
     command: CreateCampaignCommand,
@@ -49,8 +49,12 @@ export const endpoint: CommandHttpEndpoint<CreateCampaignCommand, CampaignData> 
             response: { description: 'Internal server error' }
         }]
     },
-    createPayload: (req: any): CampaignData => ({
-        name: req.body.name,
-        businessType: req.body.businessType
-    })
+    createPayload: (req: HttpRequest): CampaignData => {
+        const body = req.body as { name?: unknown; businessType?: unknown };
+        const payload = {
+            name: typeof body.name === 'string' ? body.name : '',
+            businessType: typeof body.businessType === 'string' ? body.businessType : ''
+        };
+        return payload;
+    }
 };

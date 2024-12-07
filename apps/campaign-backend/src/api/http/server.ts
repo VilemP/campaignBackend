@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import { endpoints } from './endpoints';
 import { CampaignRepository } from '../../persistence/repositories/CampaignRepository';
 
@@ -13,8 +13,9 @@ export function createServer(config: ServerConfig): Express {
     
     app.use(express.json());
     
-    endpoints.forEach(endpoint => {
-        app[endpoint.method.toLowerCase()](endpoint.path, async (req, res, next) => {
+    endpoints.forEach((endpoint) => {
+        const method = endpoint.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete' | 'patch';
+        app[method](endpoint.path, async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const payload = endpoint.createPayload(req);
                 const command = new endpoint.command(payload, config.repositories.campaign);
@@ -28,4 +29,4 @@ export function createServer(config: ServerConfig): Express {
     });
 
     return app;
-}
+} 

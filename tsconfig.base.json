@@ -18,12 +18,12 @@
     "baseUrl": ".",
     "paths": {
       "@campaign-backend/*": ["apps/campaign-backend/src/*"],
-      "@libs/cqrs": ["libs/cqrs/src"],
-      "@libs/domain": ["libs/domain/src"],
-      "@libs/errors": ["libs/errors/src"],
-      "@libs/event-sourcing": ["libs/event-sourcing/src"],
-      "@libs/rest-api": ["libs/rest-api/src"],
-      "@libs/validation": ["libs/validation/src"]
+      "@libs/cqrs": ["libs/cqrs/src/index.ts"],
+      "@libs/domain": ["libs/domain/src/index.ts"],
+      "@libs/errors": ["libs/errors/src/index.ts"],
+      "@libs/event-sourcing": ["libs/event-sourcing/src/index.ts"],
+      "@libs/rest-api": ["libs/rest-api/src/index.ts"],
+      "@libs/validation": ["libs/validation/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

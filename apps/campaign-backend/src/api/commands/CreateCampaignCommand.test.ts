@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { CreateCampaignCommand } from './CreateCampaignCommand.js';
+import { BusinessType } from '@campaign-backend/domain/model/types.js';
 
 describe('CreateCampaignCommand', () => {
     it('should create command with repository', () => {
@@ -10,7 +11,7 @@ describe('CreateCampaignCommand', () => {
         
         const payload = {
             name: 'Test Campaign',
-            description: 'Test campaign description'
+            businessType: BusinessType.RETAIL
         };
 
         const command = new CreateCampaignCommand(payload, mockRepo);

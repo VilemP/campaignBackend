@@ -7,18 +7,8 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "composite": true,
-    "declaration": true
+    "noFallthroughCasesInSwitch": true
   },
-  "files": ["src/index.ts"],  // Explicitly list the entry point
-  "include": [
-    "src/**/*.ts",
-    "src/lib/**/*.ts"  // Explicitly include lib directory
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "vite.config.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts"]
 }

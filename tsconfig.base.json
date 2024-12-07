@@ -14,8 +14,6 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "composite": true,
-
     "paths": {
       "@campaign-backend/*": ["apps/campaign-backend/src/*"],
       "@libs/cqrs": ["libs/cqrs/src"],

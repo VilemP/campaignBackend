@@ -3,6 +3,5 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": ["node"]
-  },
-  "exclude": ["vite.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+  }
 }

@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -10,18 +9,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "files": ["src/index.ts"],  // Explicitly list the entry point
-  "include": [
-    "src/**/*.ts",
-    "src/lib/**/*.ts"  // Explicitly include lib directory
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "vite.config.ts"
-  ],
-  "references": [
-    { "path": "../domain" },
-    { "path": "../errors" }
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts"]
 }

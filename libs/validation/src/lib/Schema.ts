@@ -1,94 +1,134 @@
 import { z } from 'zod';
-import { IInputSchema, IOutputSchema } from './contracts.js';
 
 export class ValidationError extends Error {
-    constructor(message: string, public readonly errors: z.ZodError) {
+    constructor(message: string, public readonly issues: ValidationIssue[]) {
         super(message);
         this.name = 'ValidationError';
     }
 }
 
-export class InputSchema<T> implements IInputSchema<T> {
-    constructor(private readonly zodSchema: z.ZodType<T>) {}
-    
-    readonly type!: T;
-    
+export interface ValidationIssue {
+    path: (string | number)[];
+    message: string;
+}
+
+class SchemaType<T> {
+    constructor(public readonly zodSchema: z.ZodType<T>) {}
+
+    optional(): SchemaType<T | undefined> {
+        return new SchemaType(this.zodSchema.optional());
+    }
+
+    nullable(): SchemaType<T | null> {
+        return new SchemaType(this.zodSchema.nullable());
+    }
+
     validate(value: unknown): T {
         try {
-            return this.zodSchema
-                .transform((val: T) => {
-                    if (typeof val === 'object' && val !== null && this.zodSchema instanceof z.ZodObject) {
-                        const shape = this.zodSchema.shape;
-                        const knownKeys = Object.keys(shape);
-                        const result = Object.fromEntries(
-                            Object.entries(val as Record<string, unknown>)
-                                .filter(([key]) => knownKeys.includes(key))
-                        );
-                        return result as T;
-                    }
-                    return val;
-                })
-                .parse(value);
+            return this.zodSchema.parse(value);
         } catch (error) {
             if (error instanceof z.ZodError) {
-                throw new ValidationError('Input validation failed', error);
+                const issues = error.errors.map(err => ({
+                    path: err.path,
+                    message: err.message
+                }));
+                throw new ValidationError('Validation failed', issues);
             }
             throw error;
         }
     }
 }
 
-export class OutputSchema<T> implements IOutputSchema<T> {
-    constructor(private readonly zodSchema: z.ZodType<T>) {}
-    
-    readonly type!: T;
-    
-    validate(value: unknown): T {
-        try {
-            const result = this.zodSchema.safeParse(value);
-            if (!result.success) {
-                throw new ValidationError('Output validation failed', result.error);
-            }
-            return result.data;
-        } catch (error) {
-            if (error instanceof ValidationError) {
-                throw error;
-            }
-            throw new Error('Unexpected validation error');
-        }
+class StringSchema extends SchemaType<string> {
+    constructor(schema: z.ZodString = z.string()) {
+        super(schema);
+    }
+
+    min(length: number, message?: string): StringSchema {
+        return new StringSchema(
+            (this.zodSchema as z.ZodString).min(length, message)
+        );
+    }
+
+    max(length: number, message?: string): StringSchema {
+        return new StringSchema(
+            (this.zodSchema as z.ZodString).max(length, message)
+        );
+    }
+
+    email(message?: string): StringSchema {
+        return new StringSchema(
+            (this.zodSchema as z.ZodString).email(message)
+        );
+    }
+
+    url(message?: string): StringSchema {
+        return new StringSchema(
+            (this.zodSchema as z.ZodString).url(message)
+        );
+    }
+}
+
+class NumberSchema extends SchemaType<number> {
+    constructor(schema: z.ZodNumber = z.number()) {
+        super(schema);
+    }
+
+    min(value: number, message?: string): NumberSchema {
+        return new NumberSchema(
+            (this.zodSchema as z.ZodNumber).min(value, message)
+        );
+    }
+
+    max(value: number, message?: string): NumberSchema {
+        return new NumberSchema(
+            (this.zodSchema as z.ZodNumber).max(value, message)
+        );
+    }
+
+    positive(message?: string): NumberSchema {
+        return new NumberSchema(
+            (this.zodSchema as z.ZodNumber).positive(message)
+        );
+    }
+
+    int(message?: string): NumberSchema {
+        return new NumberSchema(
+            (this.zodSchema as z.ZodNumber).int(message)
+        );
     }
 }
 
 export const Schema = {
-    string() {
-        return z.string();
+    string(): StringSchema {
+        return new StringSchema();
+    },
+
+    number(): NumberSchema {
+        return new NumberSchema();
     },
     
-    number() {
-        return z.number();
+    boolean(): SchemaType<boolean> {
+        return new SchemaType(z.boolean());
     },
     
-    boolean() {
-        return z.boolean();
+    nativeEnum<T extends z.EnumLike>(
+        values: T
+    ): SchemaType<T[keyof T]> {
+        return new SchemaType(z.nativeEnum(values));
     },
     
-    enum<T extends [string, ...string[]]>(values: T) {
-        return z.enum(values);
+    object<T extends Record<string, SchemaType<any>>>(shape: T): SchemaType<z.infer<z.ZodObject<{[K in keyof T]: T[K]['zodSchema']}, "strip", z.ZodTypeAny>>> {
+        const zodShape = {} as { [K in keyof T]: z.ZodType<any> };
+        for (const [key, value] of Object.entries(shape)) {
+            zodShape[key as keyof T] = value.zodSchema;
+        }
+        return new SchemaType(z.object(zodShape));
     },
-    
-    object<T extends z.ZodRawShape>(shape: T) {
-        return z.object(shape);
-    },
-    
-    array<T>(schema: z.ZodType<T>) {
-        return z.array(schema);
-    },
-    
-    input<T>(zodSchema: z.ZodType<T>): InputSchema<T> {
-        return new InputSchema(zodSchema);
-    },
-    
-    output<T>(zodSchema: z.ZodType<T>): OutputSchema<T> {
-        return new OutputSchema(zodSchema);
+
+    array<T>(schema: SchemaType<T>): SchemaType<T[]> {
+        return new SchemaType(z.array(schema.zodSchema));
     }
-}; 
+};
+
+export type InferSchemaType<T> = T extends SchemaType<infer U> ? U : never;

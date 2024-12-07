@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { CampaignCreated, CampaignBusinessTypeChanged } from './CampaignEvents';
-import { BusinessType } from '../model/types';
+import { CampaignCreated, CampaignBusinessTypeChanged } from './CampaignEvents.js';
+import { BusinessType } from '../model/types.js';
 
 describe('Campaign Events', () => {
     it('should create CampaignCreated event with correct properties', () => {

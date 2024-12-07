@@ -1,5 +1,5 @@
 import { DomainEvent } from '@libs/domain';
-import { BusinessType } from '../model/types';
+import { BusinessType } from '../model/types.js';
 
 export class CampaignCreated extends DomainEvent {
     constructor(

@@ -1,4 +1,4 @@
-import { Campaign } from '../../domain/model/Campaign';
+import { Campaign } from '../../domain/model/Campaign.js';
 
 export interface CampaignRepository {
     save(campaign: Campaign): Promise<void>;

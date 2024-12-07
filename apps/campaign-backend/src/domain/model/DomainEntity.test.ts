@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { DomainEntity } from './DomainEntity';
-import { DomainEvent } from '../events/DomainEvent';
+import { DomainEntity } from './DomainEntity.js';
+import { DomainEvent } from '../events/DomainEvent.js';
 
 class TestEvent extends DomainEvent {}
 

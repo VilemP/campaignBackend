@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EventStore, EventCollector } from '@libs/event-sourcing';
-import { Campaign } from '../../domain/model/Campaign';
-import { BusinessType } from '../../domain/model/types';
-import { EventSourcedCampaignState } from './EventSourcedCampaignState';
-import { EventSourcedCampaignRepository } from './EventSourcedCampaignRepository';
+import { Campaign } from '../../domain/model/Campaign.js';
+import { BusinessType } from '../../domain/model/types.js';
+import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
+import { EventSourcedCampaignRepository } from './EventSourcedCampaignRepository.js';
 
 describe('EventSourcedCampaignRepository', () => {
     const mockEventStore: EventStore = {

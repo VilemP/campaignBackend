@@ -1,10 +1,10 @@
 import { EventStore, EventCollector, EventRecord } from '@libs/event-sourcing';
-import { Campaign } from '../../domain/model/Campaign';
-import { CampaignRepository } from './CampaignRepository';
+import { Campaign } from '../../domain/model/Campaign.js';
+import { CampaignRepository } from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
-import { EventSourcedCampaignState } from './EventSourcedCampaignState';
-import { CampaignState } from '../../domain/model/CampaignState';
-import { UntrackedCampaignError, CampaignPersistenceError } from '../errors';
+import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
+import { CampaignState } from '../../domain/model/CampaignState.js';
+import { UntrackedCampaignError, CampaignPersistenceError } from '../errors.js';
 const SNAPSHOT_INTERVAL = 100;
 
 export class EventSourcedCampaignRepository implements CampaignRepository {

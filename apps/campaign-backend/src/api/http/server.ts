@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
-import { endpoints } from './endpoints';
-import { CampaignRepository } from '../../persistence/repositories/CampaignRepository';
+import { endpoints } from './endpoints.js';
+import { CampaignRepository } from '../../persistence/repositories/CampaignRepository.js';
 
 interface ServerConfig {
     repositories: {

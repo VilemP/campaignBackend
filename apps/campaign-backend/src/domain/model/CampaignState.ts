@@ -1,4 +1,4 @@
-import { BusinessType } from './types';
+import { BusinessType } from './types.js';
 
 export interface CampaignState {
     readonly id: string;

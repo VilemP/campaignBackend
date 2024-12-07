@@ -1,8 +1,8 @@
 import { Schema } from '@libs/validation';
 import { Command, CommandHttpEndpoint, HttpRequest } from '@libs/rest-api';
-import { Campaign } from '../../domain/model/Campaign';
-import { BusinessType } from '../../domain/model/types';
-import { CampaignRepository } from '../../persistence/repositories/CampaignRepository';
+import { Campaign } from '../../domain/model/Campaign.js';
+import { BusinessType } from '../../domain/model/types.js';
+import { CampaignRepository } from '../../persistence/repositories/CampaignRepository.js';
 
 const schema = Schema.input(Schema.object({
     name: Schema.string().min(3).max(100),

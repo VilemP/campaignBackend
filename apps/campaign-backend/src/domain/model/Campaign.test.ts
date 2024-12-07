@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { Campaign } from './Campaign';
-import { BusinessType } from './types';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents';
+import { Campaign } from './Campaign.js';
+import { BusinessType } from './types.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents.js';
 
 describe('Campaign', () => {
     describe('create', () => {

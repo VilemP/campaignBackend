@@ -1,7 +1,7 @@
 import { Entity } from '@libs/domain';
-import { BusinessType } from './types';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents';
-import { CampaignState } from './CampaignState';
+import { BusinessType } from './types.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents.js';
+import { CampaignState } from './CampaignState.js';
 
 export class Campaign extends Entity<string> {
     private name: string;

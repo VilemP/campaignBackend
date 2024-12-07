@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DomainEvent } from './DomainEvent';
+import { DomainEvent } from './DomainEvent.js';
 
 class TestEvent extends DomainEvent {
     constructor() {

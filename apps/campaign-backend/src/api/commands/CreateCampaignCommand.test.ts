@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { CreateCampaignCommand } from './CreateCampaignCommand';
+import { CreateCampaignCommand } from './CreateCampaignCommand.js';
 
 describe('CreateCampaignCommand', () => {
     it('should create command with repository', () => {

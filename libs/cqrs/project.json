@@ -1,0 +1,30 @@
+{
+  "name": "cqrs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/cqrs/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/cqrs",
+        "main": "libs/cqrs/src/index.ts",
+        "tsConfig": "libs/cqrs/tsconfig.lib.json",
+        "assets": ["libs/cqrs/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/cqrs"
+      }
+    }
+  },
+  "tags": ["type:util", "scope:shared", "layer:application"]
+}

@@ -1,4 +1,3 @@
-/// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
@@ -14,21 +13,18 @@ export default defineConfig({
     dts({ entryRoot: 'src', tsconfigPath: path.join(__dirname, 'tsconfig.lib.json') }),
   ],
   build: {
-    outDir: '../../dist/libs/domain',
     emptyOutDir: true,
+    transformMixedEsModules: true,
+    entry: 'src/index.ts',
+    name: 'domain',
+    fileName: 'index',
+    formats: ['es', 'cjs'],
+    external: [],
+    lib: { entry: 'src/index.ts', name: 'domain', fileName: 'index', formats: ['es', 'cjs'] },
+    rollupOptions: { external: [] },
+    outDir: '../../dist/libs/domain',
     reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-    lib: {
-      entry: 'src/index.ts',
-      name: 'domain',
-      fileName: 'index',
-      formats: ['es', 'cjs'],
-    },
-    rollupOptions: {
-      external: [],
-    },
+    commonjsOptions: { transformMixedEsModules: true },
   },
   test: {
     watch: false,
@@ -41,4 +37,4 @@ export default defineConfig({
       provider: 'v8',
     },
   },
-}); 
+});

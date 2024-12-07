@@ -12,7 +12,6 @@
         "main": "libs/validation/src/index.ts",
         "tsConfig": "libs/validation/tsconfig.lib.json",
         "assets": ["libs/validation/*.md"],
-        "buildLibsFromSource": true,
         "minify": false
       }
     },

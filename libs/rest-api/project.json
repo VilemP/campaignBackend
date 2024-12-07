@@ -12,7 +12,6 @@
         "main": "libs/rest-api/src/index.ts",
         "tsConfig": "libs/rest-api/tsconfig.lib.json",
         "assets": ["libs/rest-api/*.md"],
-        "buildLibsFromSource": true,
         "minify": false
       }
     },

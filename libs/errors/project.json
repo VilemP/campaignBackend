@@ -12,7 +12,6 @@
         "main": "libs/errors/src/index.ts",
         "tsConfig": "libs/errors/tsconfig.lib.json",
         "assets": ["libs/errors/*.md"],
-        "buildLibsFromSource": true,
         "minify": false
       }
     },

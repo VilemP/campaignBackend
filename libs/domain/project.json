@@ -12,7 +12,6 @@
         "main": "libs/domain/src/index.ts",
         "tsConfig": "libs/domain/tsconfig.lib.json",
         "assets": ["libs/domain/*.md"],
-        "buildLibsFromSource": true,
         "minify": false
       }
     },

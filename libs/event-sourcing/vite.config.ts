@@ -1,4 +1,3 @@
-/// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
@@ -14,21 +13,22 @@ export default defineConfig({
     dts({ entryRoot: 'src', tsconfigPath: path.join(__dirname, 'tsconfig.lib.json') }),
   ],
   build: {
-    outDir: '../../dist/libs/event-sourcing',
     emptyOutDir: true,
-    reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
+    entry: 'src/index.ts',
+    name: 'event-sourcing',
+    fileName: 'index',
+    formats: ['es', 'cjs'],
+    external: [],
     lib: {
       entry: 'src/index.ts',
       name: 'event-sourcing',
       fileName: 'index',
       formats: ['es', 'cjs'],
     },
-    rollupOptions: {
-      external: [],
-    },
+    rollupOptions: { external: [] },
+    outDir: '../../dist/libs/event-sourcing',
+    reportCompressedSize: true,
+    commonjsOptions: { transformMixedEsModules: true },
   },
   test: {
     watch: false,
@@ -38,6 +38,11 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/libs/event-sourcing',
+      provider: 'v8',
+    },
+  },
+});
+
       provider: 'v8',
     },
   },

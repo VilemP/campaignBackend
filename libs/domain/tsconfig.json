@@ -8,11 +8,12 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "composite": true
+    "composite": true,
+    "declaration": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts"],  // Include the source files at root level
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
   "references": [
-    { "path": "./tsconfig.lib.json" },
-    { "path": "./tsconfig.spec.json" }
+    { "path": "./tsconfig.lib.json" }
   ]
 }

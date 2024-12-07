@@ -4,7 +4,6 @@ import { CommandHttpEndpoint } from '@libs/rest-api';
 import { Campaign } from '../../domain/model/Campaign';
 import { BusinessType } from '../../domain/model/types';
 import { CampaignRepository } from '../../persistence/repositories/CampaignRepository';
-import { v4 as uuid } from 'uuid';
 
 const schema = Schema.input(Schema.object({
     name: Schema.string().min(3).max(100),
@@ -23,7 +22,7 @@ export class CreateCampaignCommand implements Command {
 
     async execute(): Promise<void> {
         const campaign = Campaign.create(
-            uuid(),
+            Math.random().toString(36).substring(2, 15),
             this.payload.name,
             BusinessType[this.payload.businessType]
         );

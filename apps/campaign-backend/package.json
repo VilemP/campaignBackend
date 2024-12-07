@@ -1,5 +1,6 @@
 {
   "name": "campaign-backend",
+  "type": "module",
   "dependencies": {
     "@libs/errors": "workspace:*"
   }

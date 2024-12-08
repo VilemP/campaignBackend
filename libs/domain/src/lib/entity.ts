@@ -7,7 +7,9 @@ import { DomainEventEmitter } from './domain-event-emitter.js';
 export abstract class Entity<TId> implements DomainEventEmitter {
     private listeners: Array<(event: DomainEvent) => void> = [];
 
-    constructor(private readonly _id: TId) {}
+    constructor(private readonly _id: TId, listeners?: Array<(event: DomainEvent) => void>) {
+        this.listeners = listeners || [];
+    }
 
     get id(): TId {
         return this._id;

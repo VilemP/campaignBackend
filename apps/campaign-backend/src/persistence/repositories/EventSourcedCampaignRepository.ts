@@ -1,20 +1,41 @@
 import { EventStore, EventCollector, EventRecord } from '@libs/event-sourcing';
 import { Campaign } from '../../domain/model/Campaign.js';
-import { CampaignRepository } from './CampaignRepository.js';
+import { CampaignRepository, DuplicateCampaignError } from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
 import { CampaignState } from '../../domain/model/CampaignState.js';
+import { CampaignId } from '../../domain/model/CampaignId.js';
+import { BusinessType } from '../../domain/model/types.js';
 import { UntrackedCampaignError, CampaignPersistenceError } from '../errors.js';
+
 const SNAPSHOT_INTERVAL = 100;
 
 export class EventSourcedCampaignRepository implements CampaignRepository {
     private entityVersions = new WeakMap<Campaign, number>();
     private entityStates = new WeakMap<Campaign, EventSourcedCampaignState>();
-    private eventCollector = new EventCollector();
+    private eventCollector = new EventCollector<DomainEvent>();
 
-    constructor(
-        private readonly eventStore: EventStore
-    ) {}
+    constructor(private readonly eventStore: EventStore) {}
+
+    async createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign> {
+        const existing = await this.load(id.toString());
+        if (existing) {
+            throw new DuplicateCampaignError(id.toString());
+        }
+
+        const creationEvents: DomainEvent[] = [];
+        const campaign = new Campaign(
+            id, 
+            name, 
+            businessType,
+            [(event) => creationEvents.push(event)]
+        );
+        
+        this.eventCollector.track(campaign, creationEvents);
+        await this.save(campaign);
+        
+        return campaign;
+    }
 
     async save(campaign: Campaign): Promise<void> {
         try {
@@ -22,17 +43,17 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
             if (events.length === 0) return;
 
             const version = this.getOriginalVersion(campaign);
-            const records = this.createEventRecords(campaign.id, events, version);
+            const records = this.createEventRecords(campaign.getId().toString(), events, version);
 
-            await this.appendEventsToStream(campaign.id, records, version);
-            await this.createSnapshotIfNeeded(campaign.id, records);
+            await this.appendEventsToStream(campaign.getId().toString(), records, version);
+            await this.createSnapshotIfNeeded(campaign, records);
 
             this.clearEntityTracking(campaign);
         } catch (error) {
             if (error instanceof Error && error.message.includes('not tracked')) {
-                throw new UntrackedCampaignError(campaign.id);
+                throw new UntrackedCampaignError(campaign.getId().toString());
             }
-            throw new CampaignPersistenceError(campaign.id, error as Error);
+            throw new CampaignPersistenceError(campaign.getId().toString(), error as Error);
         }
     }
 
@@ -98,16 +119,17 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
     }
 
     private async createSnapshotIfNeeded(
-        streamId: string,
+        campaign: Campaign,
         records: EventRecord<DomainEvent>[]
     ): Promise<void> {
         const lastRecord = records[records.length - 1];
         if (lastRecord.metadata.version % SNAPSHOT_INTERVAL === 0) {
-            const state = this.entityStates.get(Campaign.fromState({ id: streamId } as CampaignState));
+            const state = this.entityStates.get(campaign);
             if (state) {
+                const updatedState = state.applyEvents(records.map(record => record.event));
                 await this.eventStore.storeStateAsSnapshot(
-                    streamId,
-                    state,
+                    campaign.getId().toString(),
+                    updatedState,
                     lastRecord.metadata.version
                 );
             }

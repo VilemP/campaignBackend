@@ -1,10 +1,11 @@
 import { Schema, InferSchemaType } from '@libs/validation';
 import { Command } from '@libs/rest-api';
-import { Campaign } from '../../domain/model/Campaign.js';
 import { BusinessType } from '../../domain/model/types.js';
 import { CampaignRepository } from '../../persistence/repositories/CampaignRepository.js';
+import { CampaignId } from '@campaign-backend/domain/model/CampaignId.js';
 
 const campaignSchema = Schema.object({
+    id: Schema.string(),
     name: Schema.string(),
     businessType: Schema.nativeEnum(BusinessType)
 });
@@ -22,13 +23,12 @@ export class CreateCampaignCommand implements Command<void> {
     }
 
     async execute(): Promise<void> {
-        const campaign = Campaign.create(
-            Math.random().toString(36).substring(2, 15),
+        const id = new CampaignId(this.payload.id);
+        await this.repository.createCampaign(
+            id,
             this.payload.name,
             this.payload.businessType
         );
-        
-        await this.repository.save(campaign);
     }
 }
 

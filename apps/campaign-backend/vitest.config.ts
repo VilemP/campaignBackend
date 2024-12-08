@@ -1,18 +1,23 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vitest/config';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [nxViteTsPaths()],
+  plugins: [tsconfigPaths()],
   test: {
     name: 'campaign-backend-test',
     globals: true,
     environment: 'node',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    reporters: ['default'],
+    include: ['src/**/*.{test,spec}.ts'],
     coverage: {
-      reportsDirectory: '../../coverage/libs/validation',
-      provider: 'v8'
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/**/*.test.ts',
+        'src/**/*.spec.ts'
+      ]
     }
   }
 }); 

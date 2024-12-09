@@ -1,4 +1,4 @@
-import { EventStore, EventCollector, EventRecord } from '@libs/event-sourcing';
+import { EventStore, EventCollector, EventRecord, ConcurrencyError } from '@libs/event-sourcing';
 import { Campaign } from '../../domain/model/Campaign.js';
 import { CampaignAlreadyExists, CampaignRepository} from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
@@ -18,23 +18,28 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
     constructor(private readonly eventStore: EventStore) {}
 
     async createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign> {
-        const existing = await this.load(id.toString());
-        if (existing) {
-            throw new CampaignAlreadyExists(id.toString());
+        try {
+            const creationEvents: DomainEvent[] = [];
+            const campaign = new Campaign(
+                id, 
+                name, 
+                businessType,
+                [(event) => creationEvents.push(event)]
+            );
+            
+            // Create event record starting with version 0
+            const records = this.createEventRecords(id.toString(), creationEvents, 0); // starts at version 0            
+            // Try to append with expectedVersion 0 (stream should not exist)
+            await this.eventStore.append(id.toString(), records, 0);
+            
+            this.setupEntityTracking(campaign, records, new EventSourcedCampaignState(id, name, businessType));
+            return campaign;
+        } catch (error) {
+            if (error instanceof ConcurrencyError) {
+                throw new CampaignAlreadyExists(id.toString());
+            }
+            throw new CampaignPersistenceError(id.toString(), error as Error);
         }
-
-        const creationEvents: DomainEvent[] = [];
-        const campaign = new Campaign(
-            id, 
-            name, 
-            businessType,
-            [(event) => creationEvents.push(event)]
-        );
-        
-        this.eventCollector.track(campaign, creationEvents);
-        await this.save(campaign);
-        
-        return campaign;
     }
 
     async save(campaign: Campaign): Promise<void> {
@@ -61,10 +66,10 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
         try {
             const { events, state } = await this.eventStore.readStream<DomainEvent, CampaignState>(
                 id,
-                EventSourcedCampaignState.initial()
+                EventSourcedCampaignState.initial(id)
             );
 
-            if (events.length === 0 && state === EventSourcedCampaignState.initial()) {
+            if (events.length === 0) {
                 return null;
             }
 

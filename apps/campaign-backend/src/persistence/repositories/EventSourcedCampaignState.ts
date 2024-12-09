@@ -12,9 +12,9 @@ export class EventSourcedCampaignState implements CampaignState {
         readonly description?: string
     ) {}
 
-    static initial(): EventSourcedCampaignState {
+    static initial(id: string): EventSourcedCampaignState {
         return new EventSourcedCampaignState(
-            new CampaignId(''),
+            new CampaignId(id),
             '',
             BusinessType.STANDARD
         );

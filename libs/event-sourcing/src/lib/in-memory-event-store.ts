@@ -19,21 +19,24 @@ export class InMemoryEventStore implements EventStore {
     async append<TEvent>(
         streamId: string,
         events: EventRecord<TEvent>[],
-        expectedVersion?: number
+        expectedLatestVersion?: number
     ): Promise<void> {
         try {
             const currentEvents = this.streams.get(streamId) || [];
-            const currentVersion = currentEvents.length;
+            const latestVersionStored = currentEvents.length > 0 
+                ? currentEvents[currentEvents.length - 1].metadata.version 
+                : 0;
 
-            if (expectedVersion !== undefined && expectedVersion !== currentVersion) {
-                throw new ConcurrencyError(streamId, expectedVersion, currentVersion);
+            if (expectedLatestVersion !== undefined && expectedLatestVersion !== latestVersionStored) {
+                throw new ConcurrencyError(streamId, expectedLatestVersion, latestVersionStored);
             }
 
+            // Verify event versions are sequential
             for (const [index, event] of events.entries()) {
-                const expectedVersion = currentVersion + index;
-                if (event.metadata.version !== expectedVersion) {
+                const expectedEventVersion = latestVersionStored + index + 1;
+                if (event.metadata.version !== expectedEventVersion) {
                     throw new EventStoreWriteError(streamId, new Error(
-                        `Invalid event version. Expected ${expectedVersion}, got ${event.metadata.version}`
+                        `Invalid event version. Expected ${expectedEventVersion}, got ${event.metadata.version}`
                     ));
                 }
             }

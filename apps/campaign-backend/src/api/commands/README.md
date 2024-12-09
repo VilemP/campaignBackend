@@ -4,36 +4,45 @@ This directory contains command implementations for modifying domain state. Comm
 
 ## Design Principles
 
-1. **Self-Contained Execution**
-   - Each command is a class implementing `Command<TResult>`
+1. **Self-Contained Execution with Simplified Testing**
+   - Each command is a class implementing `Command<TPayload>`
    - No separate handlers needed - command executes itself
-   - Dependencies injected through constructor
+   - Dependencies injected through constructor, payload passed to execute
+   - This separation simplifies testing by:
+     - Avoiding complex constructor mocking and setup
+     - Making it easier to test different payload scenarios
+     - Allowing reuse of command instance across test cases
+     - Keeping test setup focused on the data being tested
    ```typescript
-   export class CreateCampaignCommand implements Command<void> {
-       constructor(
-           payload: unknown,
-           private readonly campaignRepository: CampaignRepository
-       ) {
-           this.payload = schema.validate(payload);
-       }
+   // Easy to test - create once, test multiple scenarios
+   export class CreateCampaignCommand implements Command<CampaignData> {
+       constructor(private readonly repository: CampaignRepository) {}
 
-       async execute(): Promise<void> {
+       async execute(data: CampaignData): Promise<void> {
+           const payload = campaignSchema.validate(data);
            // Implementation
        }
    }
+
+   // In tests:
+   const command = new CreateCampaignCommand(mockRepository);
+   await command.execute(scenario1Data);
+   await command.execute(scenario2Data);
+   // No need to recreate command instance for each test
    ```
 
 2. **Schema Validation**
-   - Strict validation on both input and output
-   - Validation happens in constructor
+   - Strict validation on input data
+   - Validation happens in execute method
    - Schema defines TypeScript types
    ```typescript
-   const schema = Schema.object({
-       name: Schema.string().min(3).max(100),
-       businessType: Schema.enum(['RETAIL', 'ECOMMERCE', 'SERVICE'])
+   export const campaignSchema = Schema.object({
+       id: Schema.string(),
+       name: Schema.string(),
+       businessType: Schema.nativeEnum(BusinessType)
    });
 
-   type CreateCampaignPayload = Schema.infer<typeof schema>;
+   export type CampaignData = InferSchemaType<typeof campaignSchema>;
    ```
 
 3. **Domain Model Interaction**
@@ -42,13 +51,14 @@ This directory contains command implementations for modifying domain state. Comm
    - Call domain methods to make state changes
    - Domain entities handle business rules and event production
    ```typescript
-   async execute(): Promise<void> {
-       const campaign = Campaign.create(
-           this.idGenerator.generate(),
-           this.payload.name,
-           this.payload.businessType
+   async execute(data: CampaignData): Promise<void> {
+       const payload = campaignSchema.validate(data);
+       const id = new CampaignId(payload.id);
+       await this.repository.createCampaign(
+           id,
+           payload.name,
+           payload.businessType
        );
-       await this.repository.save(campaign);
    }
    ```
 
@@ -57,97 +67,89 @@ This directory contains command implementations for modifying domain state. Comm
    - No knowledge of transport protocol
    - Allows for multiple invocation methods (HTTP, gRPC, etc.)
 
-   While commands themselves are protocol-agnostic, we co-locate endpoint definitions with commands for better developer experience:
+   Commands and their endpoints are co-located in feature folders for better developer experience:
    ```typescript
-   export const endpoint: HttpEndpoint = {
+   export const endpoint: CommandHttpEndpoint<CampaignData, CampaignRepository> = {
        method: 'POST',
        path: '/campaigns',
        command: CreateCampaignCommand,
-       schema
+       schema: campaignSchema,
+       responses: {
+           success: { code: 201, response: { description: 'Campaign created successfully' } }
+       }
    };
    ```
 
-   This co-location is purely for developer convenience:
-   - Single file to update when working on a command
-   - No need to jump between files for related changes
-   - Practical approach since commands typically have one primary way of being called
-   - Simpler maintenance when command and its invocation change together
-
 ## File Organization
 
-Each command consists of two files:
-- `CommandName.ts` - Implementation
-- `CommandName.spec.ts` - Tests
+Each command is organized in a feature folder:
+```
+CreateCampaign/
+├── Command.ts         - Command implementation
+├── Command.test.ts    - Command unit tests
+├── endpoint.ts        - HTTP endpoint definition
+├── endpoint.test.ts   - Endpoint integration tests
+└── index.ts          - Public exports
+```
 
 ## Testing Approach
 
-Tests should cover:
-1. Input validation
-2. Business rules
-3. Domain interactions
-4. Error conditions
+Tests are split into multiple layers:
+1. **Command Unit Tests** (`Command.test.ts`)
+   - Business logic
+   - Domain interactions
+   - Tries to avoid testing the repository usage but focuses on the outcomes
+   
+2. **Endpoint Tests** (`endpoint.test.ts`)
+   - Command execution verification
+   - Tests how the http request is adapted to the command execution
 
-Example test structure:
-```typescript
-describe('CreateCampaignCommand', () => {
-    describe('validation', () => {
-        it('should validate required fields', () => {
-            expect(() => new CreateCampaignCommand({
-                // missing required fields
-            })).toThrow(ValidationError);
-        });
-    });
 
-    describe('execute', () => {
-        it('should create campaign with valid data', async () => {
-            const command = new CreateCampaignCommand({
-                name: 'Test Campaign',
-                businessType: 'RETAIL'
-            });
-            await command.execute();
-            // Verify repository was called correctly
-        });
-    });
-});
-```
 
 ## Common Patterns
 
-1. **Entity Creation**
+1. **Command Structure**
 ```typescript
-async execute(): Promise<void> {
-    const campaign = Campaign.create(
-        this.idGenerator.generate(),
-        this.payload.name,
-        this.payload.businessType
-    );
-    await this.repository.save(campaign);
-}
-```
+export class SomeCommand implements Command<SomeData> {
+    constructor(private readonly dependencies: Dependencies) {}
 
-2. **Entity Update**
-```typescript
-async execute(): Promise<void> {
-    const campaign = await this.repository.load(this.payload.id);
-    if (!campaign) {
-        throw new EntityNotFoundError('Campaign', this.payload.id);
+    async execute(data: SomeData): Promise<void> {
+        const payload = schema.validate(data);
+        // Business logic implementation
     }
-    
-    campaign.update(this.payload);
-    await this.repository.save(campaign);
 }
 ```
 
-3. **Error Handling**
+2. **Endpoint Definition**
 ```typescript
-if (!this.authorizationService.canUpdate(campaign)) {
-    throw new NotAuthorizedError('Cannot update campaign');
-}
+export const endpoint: CommandHttpEndpoint<SomeData, Dependencies> = {
+    method: 'POST',
+    path: '/resource',
+    command: SomeCommand,
+    schema: someSchema,
+    responses: {
+        success: { code: 201, response: { description: 'Success message' } }
+    }
+};
 ```
 
 ## Anti-Patterns to Avoid
 
-1. ❌ **Don't bypass domain model**
+1. ❌ **Don't mix payload and dependencies in constructor**
+```typescript
+// Bad
+constructor(payload: unknown, repository: Repository) {
+    this.payload = schema.validate(payload);
+}
+
+// Good
+constructor(repository: Repository) {}
+async execute(data: Data): Promise<void> {
+    const payload = schema.validate(data);
+}
+```
+
+2. ❌ **Don't bypass domain model**
 ```typescript
 // Bad
 await this.db.update('campaigns', { id, status: 'PAUSED' });
@@ -156,33 +158,6 @@ await this.db.update('campaigns', { id, status: 'PAUSED' });
 const campaign = await this.repository.load(id);
 campaign.pause();
 await this.repository.save(campaign);
-```
-
-2. ❌ **Don't mix command and query responsibilities**
-```typescript
-// Bad
-async execute(): Promise<CampaignDetails> {
-    await this.repository.save(campaign);
-    return this.campaignQuery.getDetails(campaign.getId());
-}
-
-// Good
-async execute(): Promise<void> {
-    await this.repository.save(campaign);
-}
-```
-
-3. ❌ **Don't skip validation**
-```typescript
-// Bad
-constructor(payload: CreateCampaignPayload) {
-    this.payload = payload;
-}
-
-// Good
-constructor(payload: unknown) {
-    this.payload = schema.validate(payload);
-}
 ```
 
 4. ❌ **Don't handle events in commands**

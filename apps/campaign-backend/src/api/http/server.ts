@@ -18,11 +18,12 @@ export function createServer(config: ServerConfig): Express {
         app[method](endpoint.path, async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const payload = endpoint.createPayload(req);
-                const command = new endpoint.command(payload, config.repositories.campaign);
-                await command.execute();
+                const command = new endpoint.command(config.repositories.campaign);
+                await command.execute(payload);
                 
                 res.status(endpoint.responses.success.code).json({ success: true });
             } catch (error) {
+                console.error('Error processing request:', error);
                 next(error);
             }
         });

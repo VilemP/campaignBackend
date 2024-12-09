@@ -16,10 +16,10 @@ export interface CampaignRepository {
     load(id: string): Promise<Campaign | null>;
 }
 
-export class DuplicateCampaignError extends Error {
+export class CampaignAlreadyExists extends Error {
     constructor(id: string) {
         super(`Campaign with id ${id} already exists`);
-        this.name = 'DuplicateCampaignError';
+        this.name = 'CampaignAlreadyExists';
     }
 }
 

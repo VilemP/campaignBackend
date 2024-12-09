@@ -23,10 +23,43 @@ This directory contains our core domain model. It represents the business concep
    new CampaignPaused('123', 'Budget exceeded');
    ```
 
-3. **State Management and Reconstruction**
+3. **Event Listeners**
+   Our entities support two ways of listening to domain events, driven by a specific challenge: how to capture creation events while maintaining encapsulation and domain purity.
+
+   1. **Creation Events**
+      - Problem: Creation events happen in constructor, before anyone can attach listeners
+      - Solution: Pass listener through constructor
+      ```typescript
+      const campaign = new Campaign(
+          id,
+          name,
+          type,
+          event => {
+              // Only way to catch CampaignCreated event
+              // Without this, creation events would be lost
+          }
+      );
+      ```
+
+   2. **Lifecycle Events**
+      - All other events after creation
+      - We can use standard `listen` method
+      ```typescript
+      campaign.listen(event => {
+          // Catches all subsequent events
+      });
+      ```
+
+   This approach:
+   - Preserves domain purity - no infrastructure dependencies
+   - Maintains encapsulation - internal state only changed through business methods
+   - Ensures no events are lost - even during creation
+   - Keeps event handling flexible - different listeners for different needs
+
+4. **State Management and Reconstruction**
    - Entity state can only be modified through business methods
    - Business methods enforce all invariants and rules
-   - Each state change produces appropriate domain event
+   - Each state change produces appropriate domain event(s)
 
    The domain model faces a fundamental tension between state validity and reconstruction needs:
    ```typescript
@@ -54,7 +87,7 @@ This directory contains our core domain model. It represents the business concep
    - Business rules are enforced on all new changes going forward
    - Applications can implement additional safety in their reconstruction strategy
 
-4. **Factory Methods**
+5. **Factory Methods**
    - `create` for new entities - enforces all business rules
    - `fromState` for reconstruction from persistence state
 

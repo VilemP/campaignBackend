@@ -57,9 +57,8 @@ This directory contains command implementations for modifying domain state. Comm
    - No knowledge of transport protocol
    - Allows for multiple invocation methods (HTTP, gRPC, etc.)
 
-   While we define HTTP endpoints in the same files as commands, this is purely for developer convenience:
+   While commands themselves are protocol-agnostic, we co-locate endpoint definitions with commands for better developer experience:
    ```typescript
-   // Co-located for convenience but could be defined elsewhere
    export const endpoint: HttpEndpoint = {
        method: 'POST',
        path: '/campaigns',
@@ -67,10 +66,12 @@ This directory contains command implementations for modifying domain state. Comm
        schema
    };
    ```
-   Commands themselves remain protocol-agnostic and could be:
-   - Exposed through different protocols
-   - Have endpoint definitions moved to separate files
-   - Used in different contexts (e.g., message queue consumers)
+
+   This co-location is purely for developer convenience:
+   - Single file to update when working on a command
+   - No need to jump between files for related changes
+   - Practical approach since commands typically have one primary way of being called
+   - Simpler maintenance when command and its invocation change together
 
 ## File Organization
 

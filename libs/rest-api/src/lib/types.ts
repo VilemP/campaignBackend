@@ -53,11 +53,11 @@ export interface ResponseDefinition {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface Command<TPayload> {
-    execute(): Promise<void>;
+    execute(data: TPayload): Promise<void>;
 }
 
 export interface CommandConstructor<T extends Command<TPayload>, TPayload, TDeps = unknown> {
-    new(payload: TPayload, deps: TDeps): T;
+    new(deps: TDeps): T;
 }
 
 export interface CommandHttpEndpoint<TPayload, TDeps = unknown> {

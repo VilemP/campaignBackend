@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CreateCampaignCommand } from './CreateCampaignCommand.js';
+import { CreateCampaignCommand } from './CreateCampaign/Command.js';
 import { BusinessType } from '@campaign-backend/domain/model/types.js';
 import { CampaignId } from '@campaign-backend/domain/model/CampaignId.js';
 import { CampaignAlreadyExists } from '../../persistence/repositories/CampaignRepository.js';
@@ -23,8 +23,8 @@ describe('Campaign Creation', () => {
         describe('when the campaign with such id does not exist yet', () => {
             repository.empty();
             it('then the campaign should be created with provided data', async () => {
-                const command = new CreateCampaignCommand(campaignData, repository);
-                await command.execute();
+                const command = new CreateCampaignCommand(repository);
+                await command.execute(campaignData);
 
                 const campaign = await repository.load(campaignData.id);
                 expect(campaign).toBeDefined();
@@ -43,8 +43,8 @@ describe('Campaign Creation', () => {
             });
 
             it('then it should fail with duplicate campaign error', async () => {
-                const command = new CreateCampaignCommand(campaignData, repository);
-                await expect(command.execute()).rejects.toThrow(CampaignAlreadyExists);
+                const command = new CreateCampaignCommand(repository);
+                await expect(command.execute(campaignData)).rejects.toThrow(CampaignAlreadyExists);
             });
         });
     });

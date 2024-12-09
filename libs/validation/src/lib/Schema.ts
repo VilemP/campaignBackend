@@ -12,7 +12,7 @@ export interface ValidationIssue {
     message: string;
 }
 
-class SchemaType<T> {
+export class SchemaType<T> {
     constructor(public readonly zodSchema: z.ZodType<T>) {}
 
     optional(): SchemaType<T | undefined> {

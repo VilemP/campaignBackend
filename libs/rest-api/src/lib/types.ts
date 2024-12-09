@@ -1,4 +1,4 @@
-import { InputSchema } from '@libs/validation';
+import { SchemaType } from '@libs/validation';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -64,7 +64,7 @@ export interface CommandHttpEndpoint<TPayload, TDeps = unknown> {
     method: HttpMethod;
     path: string;
     command: CommandConstructor<Command<TPayload>, TPayload, TDeps>;
-    schema: InputSchema<TPayload>;
+    schema: SchemaType<TPayload>;
     responses: ResponseDefinition;
     createPayload(req: HttpRequest): TPayload;
     summary?: string;

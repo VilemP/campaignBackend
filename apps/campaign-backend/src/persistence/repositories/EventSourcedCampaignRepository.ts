@@ -1,6 +1,6 @@
 import { EventStore, EventCollector, EventRecord } from '@libs/event-sourcing';
 import { Campaign } from '../../domain/model/Campaign.js';
-import { CampaignRepository, DuplicateCampaignError } from './CampaignRepository.js';
+import { CampaignAlreadyExists, CampaignRepository} from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
 import { CampaignState } from '../../domain/model/CampaignState.js';
@@ -20,7 +20,7 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
     async createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign> {
         const existing = await this.load(id.toString());
         if (existing) {
-            throw new DuplicateCampaignError(id.toString());
+            throw new CampaignAlreadyExists(id.toString());
         }
 
         const creationEvents: DomainEvent[] = [];

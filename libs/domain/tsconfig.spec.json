@@ -2,9 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["vitest", "node"],
-    "composite": true
+    "module": "NodeNext",
+    "types": ["vitest", "node"]
   },
   "include": [
     "vitest.config.ts",

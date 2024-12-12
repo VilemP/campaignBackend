@@ -1,10 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../dist/libs/errors",
     "declaration": true,
-    "types": ["node", "vite/client"],
-    "composite": true
+    "types": ["node", "vite/client"]
   },
   "include": ["src/**/*.ts"],
   "exclude": [

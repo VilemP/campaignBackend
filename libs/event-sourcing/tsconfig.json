@@ -10,6 +10,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts"]
+  "files": ["src/index.ts"],  // Explicitly list the entry point
+  "include": [
+    "src/**/*.ts",
+    "src/lib/**/*.ts"  // Explicitly include lib directory
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "vite.config.ts"
+  ]
 }

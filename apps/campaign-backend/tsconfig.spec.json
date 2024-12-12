@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "../../dist/out-tsc",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
@@ -11,7 +10,6 @@
     "vite.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts",
-    "../../libs/**/*.ts"
+    "src/**/*.d.ts"
   ]
 }

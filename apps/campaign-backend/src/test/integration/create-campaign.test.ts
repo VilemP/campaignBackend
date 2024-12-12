@@ -2,6 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Server } from 'http';
 import request from 'supertest';
 import { InMemoryEventStore } from '@libs/event-sourcing';
+import { Command } from '@libs/rest-api';
+import { ClientError } from '@libs/errors'
 import { EventSourcedCampaignRepository } from '../../persistence/repositories/EventSourcedCampaignRepository.js';
 import { BusinessType } from '../../domain/model/types.js';
 import { NestFactory } from '@nestjs/core'; // Direct import

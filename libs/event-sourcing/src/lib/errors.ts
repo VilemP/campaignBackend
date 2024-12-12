@@ -1,4 +1,4 @@
-import { ClientError, InternalError } from '@libs/errors';
+import { ClientError, InternalError } from '@libs/errors;
 
 export class EventStoreConnectionError implements InternalError {
     readonly kind = 'internal_error';

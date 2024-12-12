@@ -1,4 +1,4 @@
-import { EventRecord } from './types';
+import { EventRecord } from './types.js';
 
 /**
  * Interface for an event store implementation

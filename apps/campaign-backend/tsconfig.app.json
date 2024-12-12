@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../dist/apps/campaign-backend",
     "types": ["node", "vite/client"]
   },
   "include": ["src/**/*.ts"],

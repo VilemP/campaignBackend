@@ -16,6 +16,8 @@
 //     console.log(`Server is running on port ${port}`);
 // }); 
 
+import { Command } from '@libs/rest-api';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js'; 
 

@@ -15,13 +15,7 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/apps/campaign-backend',
-      provider: 'v8',
-      include: ['src/**/*.ts'],
-      exclude: [
-        'src/**/*.d.ts',
-        'src/**/*.test.ts',
-        'src/**/*.spec.ts'
-      ]
+      provider: 'v8'
     }
   }
 });

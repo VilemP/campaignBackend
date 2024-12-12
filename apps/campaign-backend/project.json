@@ -47,7 +47,8 @@
       ],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/apps/campaign-backend"
+        "reportsDirectory": "../../coverage/apps/campaign-backend",
+        "config": "apps/campaign-backend/vitest.config.ts"
       }
     }
   },

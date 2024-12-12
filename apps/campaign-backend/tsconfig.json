@@ -10,8 +10,10 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
-  }
-  // "include": ["src/**/*.ts"],
-  // "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts"]
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true, // added for Nest
+    "experimentalDecorators": true //added for Nest
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "vite.config.ts", "node_modules"]
 }

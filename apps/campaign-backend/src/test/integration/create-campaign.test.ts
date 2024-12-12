@@ -1,21 +1,23 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { Express } from 'express';
 import { Server } from 'http';
 import request from 'supertest';
-import { createServer } from '../../api/http/server.js';
 import { InMemoryEventStore } from '@libs/event-sourcing';
 import { EventSourcedCampaignRepository } from '../../persistence/repositories/EventSourcedCampaignRepository.js';
 import { BusinessType } from '../../domain/model/types.js';
+import { NestFactory } from '@nestjs/core'; // Direct import
+import { AppModule } from '../../app.module.js'; // Adjust the path as necessary
 
 describe('Create Campaign Integration', () => {
-    let app: Express;
+    let app: any;
     let server: Server;
     let repository: EventSourcedCampaignRepository;
+    let eventStore: InMemoryEventStore;
     
-    beforeAll(() => {
-        const eventStore = new InMemoryEventStore();
+    beforeAll(async () => {
+        eventStore = new InMemoryEventStore();
+        await eventStore.init();
         repository = new EventSourcedCampaignRepository(eventStore);
-        app = createServer({ repositories: { campaign: repository } });
+        app = await NestFactory.create(AppModule); // Use the direct import
         server = app.listen(0); // Random port
     });
 
@@ -32,7 +34,7 @@ describe('Create Campaign Integration', () => {
             businessType: BusinessType.STANDARD
         };
 
-        await request(app)
+        await request(app.getHttpServer())
             .post('/campaigns')
             .send(payload)
             .expect(201);
@@ -41,4 +43,4 @@ describe('Create Campaign Integration', () => {
         expect(storedCampaign).not.toBeNull();
         expect(storedCampaign?.getId().toString()).toBe(payload.id);
     });
-}); 
+});

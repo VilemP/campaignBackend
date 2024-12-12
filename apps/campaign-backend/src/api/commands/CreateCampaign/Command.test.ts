@@ -1,11 +1,25 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+
+import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCampaignCommand } from './Command.js';
-import { BusinessType } from '@campaign-backend/domain/model/types.js';
-import { CampaignId } from '@campaign-backend/domain/model/CampaignId.js';
-import { CampaignAlreadyExists } from '../../../persistence/repositories/CampaignRepository.js';
+import { BusinessType } from '../../../domain/model/types.js';
+import { CampaignId } from '../../..//domain/model/CampaignId.js';
 import { InMemoryCampaignRepository } from '../../../persistence/repositories/InMemoryCampaignRepository.js';
+import { describe, expect, it, beforeEach } from 'vitest';
+import { CampaignAlreadyExists } from '../../../persistence/repositories/CampaignRepository.js';
 
 describe('Campaign Creation', () => {
+    let command: CreateCampaignCommand;
+    let repository: InMemoryCampaignRepository;
+
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [CreateCampaignCommand, InMemoryCampaignRepository],
+        }).compile();
+
+        command = module.get<CreateCampaignCommand>(CreateCampaignCommand);
+        repository = module.get<InMemoryCampaignRepository>(InMemoryCampaignRepository);
+    });
+
     describe('given a campaign with name and business type', () => {
         const campaignId = new CampaignId(crypto.randomUUID());
         const campaignData = {

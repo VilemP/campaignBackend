@@ -1,0 +1,95 @@
+{
+  "name": "campaign-platform",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/campaign-platform/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/campaign-platform",
+        "index": "apps/campaign-platform/src/index.html",
+        "browser": "apps/campaign-platform/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/campaign-platform/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/campaign-platform/public"
+          }
+        ],
+        "styles": ["apps/campaign-platform/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/campaign-platform/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/campaign-platform/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "campaign-platform:build:production"
+        },
+        "development": {
+          "buildTarget": "campaign-platform:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "campaign-platform:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/campaign-platform/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "campaign-platform:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/campaign-platform/browser",
+        "spa": true
+      }
+    }
+  }
+}

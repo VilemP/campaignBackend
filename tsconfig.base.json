@@ -4,17 +4,26 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@ad-distribution": ["domains/ad-distribution/src"],
+      "@campaign-platform": ["campaign-platform/src"],
+      "@forecasting": ["domains/forecasting/src"],
+      "@shared-lbs": ["shared/lbs/src"],
+      "@supply-shaping": ["domains/supply-shaping/src"]
+    },
+    "types": ["vite/client"]
   },
   "exclude": ["node_modules", "tmp"]
 }

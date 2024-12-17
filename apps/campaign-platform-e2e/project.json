@@ -1,9 +1,0 @@
-{
-  "name": "campaign-platform-e2e",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "sourceRoot": "apps/campaign-platform-e2e/src",
-  "implicitDependencies": ["campaign-platform"],
-  "// targets": "to see all targets run: nx show project campaign-platform-e2e --web",
-  "targets": {}
-}

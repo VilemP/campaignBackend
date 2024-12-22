@@ -32,7 +32,7 @@ describe('POST /campaigns endpoint', () => {
         const executeSpy = vi.spyOn(CreateCampaignCommand.prototype, 'execute');
     
         const httpRequest = {
-            id: '123e4567-e89b-12d3-a456-426614174000',
+            id: '018df485-9956-7f8c-8502-f6e271193b2b',
             name: 'Test Campaign',
             businessType: 'STANDARD'
         };
@@ -53,7 +53,7 @@ describe('POST /campaigns endpoint', () => {
         const executeSpy = vi.spyOn(CreateCampaignCommand.prototype, 'execute');
 
         const httpRequest = {
-            id: '123e4567-e89b-12d3-a456-426614174000',
+            id: '018df485-9956-7f8c-8502-f6e271193b2b',
             name: 'Test Campaign',
             businessType: 'STANDARD',
             extraProperty: 'some value',
@@ -85,7 +85,7 @@ describe('POST /campaigns endpoint', () => {
             },
             {
                 data: {
-                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    id: '018df485-9956-7f8c-8502-f6e271193b2b',
                     name: 'Te',  // too short
                     businessType: 'STANDARD'
                 },
@@ -93,7 +93,7 @@ describe('POST /campaigns endpoint', () => {
             },
             {
                 data: {
-                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    id: '018df485-9956-7f8c-8502-f6e271193b2b',
                     name: 'Test Campaign',
                     businessType: 'INVALID_TYPE'
                 },

@@ -1,8 +1,9 @@
 import { IsString, IsEnum, IsUUID, Length, IsNotEmpty } from 'class-validator';
 import { BusinessType } from '../../../../domain/model/types.js';
 
+
 export class CreateCampaignData {
-    @IsUUID(4, { message: 'Campaign ID must be a valid UUIDv4' })
+    @IsUUID(7, { message: 'Campaign ID must be a valid UUIDv4' })
     @IsNotEmpty()
     id!: string;
 

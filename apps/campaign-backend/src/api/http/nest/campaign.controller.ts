@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { CreateCampaignData } from './data/create-campaign.data.js';
 import { CreateCampaignCommand } from '../../commands/CreateCampaign/Command.js';
-import { CampaignRepository } from '../../../persistence/repositories/CampaignRepository.js';
+import type  { CampaignRepository } from '../../../persistence/repositories/CampaignRepository.js';
 import { CAMPAIGN_REPOSITORY } from './campaign.token.js';
 
 @Controller('campaigns')
@@ -14,7 +14,6 @@ export class CampaignController {
     @Post()
     async create(@Body() createCampaignData: CreateCampaignData): Promise<void> {
         const command = new CreateCampaignCommand(this.repository);
-        console.log(createCampaignData);
         await command.execute(createCampaignData);
     }
 }

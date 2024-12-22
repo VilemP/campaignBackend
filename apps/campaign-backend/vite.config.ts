@@ -2,11 +2,27 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import swc from 'unplugin-swc';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/campaign-backend',
   root: __dirname,
-  plugins: [nxViteTsPaths()],
+  plugins: [
+    nxViteTsPaths(),
+    swc.vite({
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          decorators: true,
+        },
+        target: 'es2020',
+        transform: {
+          decoratorMetadata: true,
+          legacyDecorator: true
+        },
+      }
+    })
+  ],
   build: {
     target: 'es2020',
     ssr: true,
@@ -22,19 +38,5 @@ export default defineConfig({
         assetFileNames: '[name][extname]'
       }
     }
-  },  
-  optimizeDeps: {
-    esbuildOptions: {
-      target: 'es2020',
-      supported: { 
-        decorators: true 
-      },
-      tsconfigRaw: {
-        compilerOptions: {
-          experimentalDecorators: true
-        }
-      }
-    }
-
   }
 });

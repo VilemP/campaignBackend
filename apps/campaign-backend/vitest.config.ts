@@ -1,9 +1,25 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import swc from 'unplugin-swc';
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
+  plugins: [
+    tsconfigPaths(),
+    swc.vite({
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          decorators: true,
+        },
+        target: 'es2020',
+        transform: {
+          decoratorMetadata: true,
+          legacyDecorator: true
+        },
+      }
+    })
+  ],
   test: {
     name: 'campaign-backend-test',
     globals: true,
@@ -19,11 +35,5 @@ export default defineConfig({
         'src/**/*.spec.ts'
       ]
     }
-  },
-  esbuild: {
-    target: 'es2020',
-    supported: {
-      decorators: true
-    }
   }
-}); 
+});

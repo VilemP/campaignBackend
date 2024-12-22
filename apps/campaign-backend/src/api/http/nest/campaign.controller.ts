@@ -14,6 +14,7 @@ export class CampaignController {
     @Post()
     async create(@Body() createCampaignData: CreateCampaignData): Promise<void> {
         const command = new CreateCampaignCommand(this.repository);
+        console.log(createCampaignData);
         await command.execute(createCampaignData);
     }
 }

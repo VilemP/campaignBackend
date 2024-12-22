@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   test: {
+    name: 'campaign-backend-test',
     globals: true,
     pool: 'forks',
     poolOptions: {

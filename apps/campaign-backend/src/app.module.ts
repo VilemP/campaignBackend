@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { CampaignModule } from './api/http/nest/campaign.module.js';
 
 @Module({
-    imports: [CampaignModule],
+    imports: [CampaignModule]
 })
 export class AppModule {}

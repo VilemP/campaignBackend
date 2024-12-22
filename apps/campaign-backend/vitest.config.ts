@@ -19,5 +19,11 @@ export default defineConfig({
         'src/**/*.spec.ts'
       ]
     }
+  },
+  esbuild: {
+    target: 'es2020',
+    supported: {
+      decorators: true
+    }
   }
 }); 

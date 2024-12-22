@@ -1,15 +1,27 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { BusinessType } from '../../../domain/model/types.js';
-import { CampaignRepository } from '../../../persistence/repositories/CampaignRepository.js';
 import { CreateCampaignCommand } from './Command.js';
-import { CampaignModule } from '../../http/nest/campaign.module.js';
 import { CAMPAIGN_REPOSITORY } from '../../http/nest/campaign.token.js';
+import { AppModule } from '../../../app.module.js';
+import { InMemoryCampaignRepository } from '@campaign-backend/persistence/repositories/InMemoryCampaignRepository.js';
 
 describe('POST /campaigns endpoint', () => {
     let app: INestApplication;
+
+    beforeEach(async () => {
+        const moduleRef = await Test.createTestingModule({
+          imports: [AppModule],
+        })    
+        .overrideProvider(CAMPAIGN_REPOSITORY)
+        .useValue(new InMemoryCampaignRepository())
+        .compile();
+      
+        app = moduleRef.createNestApplication();
+        return await app.init();
+      });
 
     afterEach(async () => {
         vi.restoreAllMocks();
@@ -18,23 +30,7 @@ describe('POST /campaigns endpoint', () => {
 
     it('should execute [create campaign command] with provided data' , async () => {
         const executeSpy = vi.spyOn(CreateCampaignCommand.prototype, 'execute');
-        
-        const mockRepository: CampaignRepository = {
-            createCampaign: vi.fn(),
-            save: vi.fn(),
-            load: vi.fn()
-        };
-
-        const moduleRef = await Test.createTestingModule({
-            imports: [CampaignModule],
-        })
-        .overrideProvider(CAMPAIGN_REPOSITORY)
-        .useValue(mockRepository)
-        .compile();
-
-        app = moduleRef.createNestApplication();
-        await app.init();
-
+    
         const httpRequest = {
             id: '123e4567-e89b-12d3-a456-426614174000',
             name: 'Test Campaign',
@@ -51,5 +47,67 @@ describe('POST /campaigns endpoint', () => {
             name: httpRequest.name,
             businessType: BusinessType.STANDARD
         });
+    });
+
+    it('should accept request with extra properties', async () => {
+        const executeSpy = vi.spyOn(CreateCampaignCommand.prototype, 'execute');
+
+        const httpRequest = {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'Test Campaign',
+            businessType: 'STANDARD',
+            extraProperty: 'some value',
+            anotherExtra: 123
+        };
+
+        const response = await request(app.getHttpServer())
+            .post('/campaigns')
+            .send(httpRequest);
+
+        expect(response.status).toBe(201);
+        expect(executeSpy).toHaveBeenCalledWith({
+            id: httpRequest.id,
+            name: httpRequest.name,
+            businessType: BusinessType.STANDARD
+        });
+    });
+
+    it('should fail with validation errors for invalid data', async () => {
+
+        const invalidRequests = [
+            {
+                data: {
+                    id: 'not-a-uuid',
+                    name: 'Test Campaign',
+                    businessType: 'STANDARD'
+                },
+                expectedError: 'Campaign ID must be a valid UUIDv4'
+            },
+            {
+                data: {
+                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    name: 'Te',  // too short
+                    businessType: 'STANDARD'
+                },
+                expectedError: 'Campaign name must be between 3 and 100 characters'
+            },
+            {
+                data: {
+                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    name: 'Test Campaign',
+                    businessType: 'INVALID_TYPE'
+                },
+                expectedError: 'Business type must be one of: SPONSORSHIP, STANDARD'
+            }
+        ];
+
+        for (const { data, expectedError } of invalidRequests) {
+            const response = await request(app.getHttpServer())
+                .post('/campaigns')
+                .send(data);
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toContain(expectedError);
+        }
     });
 });

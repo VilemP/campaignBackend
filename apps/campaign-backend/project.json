@@ -24,9 +24,11 @@
       }
     },
     "serve": {
-      "executor": "@nx/vite:dev-server",
+      "executor": "@nx/js:node",
       "options": {
-        "buildTarget": "campaign-backend:build"
+        "buildTarget": "campaign-backend:build",
+        "port": 9229,
+        "inspect": true
       }
     },
     "lint": {

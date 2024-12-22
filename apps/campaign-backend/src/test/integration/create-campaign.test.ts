@@ -35,7 +35,7 @@ describe('Create Campaign Integration', () => {
         const payload = {
             id: crypto.randomUUID(),
             name: 'Test Campaign',
-            businessType: BusinessType.STANDARD
+            businessType: BusinessType.STANDARD,
         };
 
         await request(app.getHttpServer())

@@ -8,7 +8,7 @@ import { CAMPAIGN_REPOSITORY } from './campaign.token.js';
     controllers: [CampaignController],
     providers: [{
         provide: CAMPAIGN_REPOSITORY,
-        useClass: process.env['NODE_ENV'] === 'test' 
+        useClass: true
             ? InMemoryCampaignRepository 
             : EventSourcedCampaignRepository
     }]

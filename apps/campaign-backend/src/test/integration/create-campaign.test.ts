@@ -1,28 +1,34 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { Express } from 'express';
-import { Server } from 'http';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { createServer } from '../../api/http/server.js';
-import { InMemoryEventStore } from '@libs/event-sourcing';
-import { EventSourcedCampaignRepository } from '../../persistence/repositories/EventSourcedCampaignRepository.js';
+import { AppModule } from '../../app.module.js';
 import { BusinessType } from '../../domain/model/types.js';
+import { CAMPAIGN_REPOSITORY } from '../../api/http/nest/campaign.token.js';
+import { EventSourcedCampaignRepository } from '../../persistence/repositories/EventSourcedCampaignRepository.js';
+import { InMemoryEventStore } from '@libs/event-sourcing';
 
 describe('Create Campaign Integration', () => {
-    let app: Express;
-    let server: Server;
+    let app: INestApplication;
     let repository: EventSourcedCampaignRepository;
     
-    beforeAll(() => {
+    beforeAll(async () => {
         const eventStore = new InMemoryEventStore();
         repository = new EventSourcedCampaignRepository(eventStore);
-        app = createServer({ repositories: { campaign: repository } });
-        server = app.listen(0); // Random port
+
+        const moduleRef = await Test.createTestingModule({
+            imports: [AppModule],
+        })
+        .overrideProvider(CAMPAIGN_REPOSITORY)
+        .useValue(repository)
+        .compile();
+
+        app = moduleRef.createNestApplication();
+        await app.init();
     });
 
-    afterAll(() => {
-        return new Promise<void>((resolve) => {
-            server.close(() => resolve());
-        });
+    afterAll(async () => {
+        await app?.close();
     });
 
     it('should create campaign and return 201', async () => {
@@ -32,7 +38,7 @@ describe('Create Campaign Integration', () => {
             businessType: BusinessType.STANDARD
         };
 
-        await request(app)
+        await request(app.getHttpServer())
             .post('/campaigns')
             .send(payload)
             .expect(201);
@@ -41,4 +47,4 @@ describe('Create Campaign Integration', () => {
         expect(storedCampaign).not.toBeNull();
         expect(storedCampaign?.getId().toString()).toBe(payload.id);
     });
-}); 
+});

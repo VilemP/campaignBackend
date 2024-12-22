@@ -1,17 +1,13 @@
-import { createServer } from './api/http/server.js';
-import { InMemoryEventStore } from '@libs/event-sourcing';
-import { EventSourcedCampaignRepository } from './persistence/repositories/EventSourcedCampaignRepository.js';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module.js';
 
-const port = process.env['PORT'] || 3000;
-const eventStore = new InMemoryEventStore();
-const campaignRepository = new EventSourcedCampaignRepository(eventStore);
+async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    const port = process.env['PORT'] || 3000;
+    
+    await app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
 
-const server = createServer({
-    repositories: {
-        campaign: campaignRepository
-    }
-});
-
-server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-}); 
+bootstrap();

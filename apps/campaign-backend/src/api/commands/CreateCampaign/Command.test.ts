@@ -21,7 +21,6 @@ describe('Campaign Creation', () => {
         });
 
         describe('when the campaign with such id does not exist yet', () => {
-            repository.empty();
             it('then the campaign should be created with provided data', async () => {
                 const command = new CreateCampaignCommand(repository);
                 await command.execute(campaignData);

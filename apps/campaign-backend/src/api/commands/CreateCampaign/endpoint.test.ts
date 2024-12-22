@@ -1,16 +1,22 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { BusinessType } from '../../../domain/model/types.js';
 import { CampaignRepository } from '../../../persistence/repositories/CampaignRepository.js';
-import { createServer } from '../../http/server.js';
 import { CreateCampaignCommand } from './Command.js';
+import { CampaignModule } from '../../http/nest/campaign.module.js';
+import { CAMPAIGN_REPOSITORY } from '../../http/nest/campaign.token.js';
 
 describe('POST /campaigns endpoint', () => {
-    afterEach(() => {
+    let app: INestApplication;
+
+    afterEach(async () => {
         vi.restoreAllMocks();
+        await app?.close();
     });
 
-    it('should pass HTTP request data to command execute', async () => {
+    it('should execute [create campaign command] with provided data' , async () => {
         const executeSpy = vi.spyOn(CreateCampaignCommand.prototype, 'execute');
         
         const mockRepository: CampaignRepository = {
@@ -18,12 +24,16 @@ describe('POST /campaigns endpoint', () => {
             save: vi.fn(),
             load: vi.fn()
         };
-        
-        const app = createServer({
-            repositories: {
-                campaign: mockRepository
-            }
-        });
+
+        const moduleRef = await Test.createTestingModule({
+            imports: [CampaignModule],
+        })
+        .overrideProvider(CAMPAIGN_REPOSITORY)
+        .useValue(mockRepository)
+        .compile();
+
+        app = moduleRef.createNestApplication();
+        await app.init();
 
         const httpRequest = {
             id: '123e4567-e89b-12d3-a456-426614174000',
@@ -31,7 +41,7 @@ describe('POST /campaigns endpoint', () => {
             businessType: 'STANDARD'
         };
 
-        const response = await request(app)
+        const response = await request(app.getHttpServer())
             .post('/campaigns')
             .send(httpRequest);
 

@@ -1,27 +1,18 @@
-import { Schema, InferSchemaType } from '@libs/validation';
 import { Command } from '@libs/rest-api';
-import { BusinessType } from '../../../domain/model/types.js';
 import { CampaignRepository } from '../../../persistence/repositories/CampaignRepository.js';
 import { CampaignId } from '@campaign-backend/domain/model/CampaignId.js';
+import { CreateCampaignData } from '@campaign-backend/api/http/nest/data/create-campaign.data.js';
 
-export const campaignSchema = Schema.object({
-    id: Schema.string(),
-    name: Schema.string(),
-    businessType: Schema.nativeEnum(BusinessType)
-});
 
-export type CampaignData = InferSchemaType<typeof campaignSchema>;
-
-export class CreateCampaignCommand implements Command<CampaignData> {
+export class CreateCampaignCommand implements Command<CreateCampaignData> {
     constructor(private readonly repository: CampaignRepository) {}
 
-    async execute(data: CampaignData): Promise<void> {
-        const payload = campaignSchema.validate(data);
-        const id = new CampaignId(payload.id);
+    async execute(data: CreateCampaignData): Promise<void> {
+        const id = new CampaignId(data.id);
         await this.repository.createCampaign(
             id,
-            payload.name,
-            payload.businessType
+            data.name,
+            data.businessType
         );
     }
 } 

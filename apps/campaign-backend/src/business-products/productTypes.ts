@@ -1,4 +1,4 @@
-export enum BusinessType {
+export enum BusinessProductType {
     SPONSORSHIP = 'SPONSORSHIP',
     STANDARD = 'STANDARD'
 }

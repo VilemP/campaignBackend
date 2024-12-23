@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../../app.module.js';
-import { BusinessType } from '../../domain/model/types.js';
+import { BusinessProductType } from '../../business-products/productTypes.js';
 import { CAMPAIGN_REPOSITORY } from '../../campaigns/adapters/di/di.tokens.js';
 import { EventSourcedCampaignRepository } from '../../campaigns/adapters/repositories/EventSourcedCampaignRepository.js';
 import { InMemoryEventStore } from '@libs/event-sourcing';
@@ -36,7 +36,7 @@ describe('Create Campaign Integration', () => {
         const payload = {
             id: CampaignId.generate().toString(),
             name: 'Test Campaign',
-            businessType: BusinessType.STANDARD,
+            businessType: BusinessProductType.STANDARD,
         };
 
         await request(app.getHttpServer())

@@ -1,5 +1,5 @@
 import { IsString, IsEnum, IsUUID, Length, IsNotEmpty } from 'class-validator';
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 
 
 export class CreateCampaignPayload {
@@ -12,9 +12,9 @@ export class CreateCampaignPayload {
     @Length(3, 100, { message: 'Campaign name must be between 3 and 100 characters' })
     name!: string;
 
-    @IsEnum(BusinessType, { 
-        message: `Business type must be one of: ${Object.values(BusinessType).join(', ')}`
+    @IsEnum(BusinessProductType, { 
+        message: `Business type must be one of: ${Object.values(BusinessProductType).join(', ')}`
     })
     @IsNotEmpty()
-    businessType: BusinessType = BusinessType.STANDARD;
+    businessType: BusinessProductType = BusinessProductType.STANDARD;
 }

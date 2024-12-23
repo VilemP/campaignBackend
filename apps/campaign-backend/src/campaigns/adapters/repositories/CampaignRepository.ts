@@ -1,12 +1,12 @@
 import { Campaign } from '../../Campaign.js';
 import { CampaignId } from '../../CampaignId.js';
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 
 export interface CampaignRepository {
     /**
      * Creates a new campaign. Throws if campaign with given id already exists.
      */
-    createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign>;
+    createCampaign(id: CampaignId, name: string, businessType: BusinessProductType): Promise<Campaign>;
 
     /**
      * Saves changes to an existing campaign. Throws if campaign doesn't exist.

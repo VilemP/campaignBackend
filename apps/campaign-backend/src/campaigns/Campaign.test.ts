@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Campaign } from './Campaign.js';
-import { BusinessType } from '../domain/model/types.js';
+import { BusinessProductType } from '../business-products/productTypes.js';
 import { CampaignCreated, CampaignBusinessTypeChanged } from './events/CampaignEvents.js';
 import { DomainEvent } from '@libs/domain';
 import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
@@ -13,7 +13,7 @@ describe('Campaign', () => {
             new Campaign(
                 CAMPAIGN_ID, 
                 'Test Campaign', 
-                BusinessType.STANDARD,
+                BusinessProductType.STANDARD,
                 [(event: DomainEvent) => {
                     if (event instanceof CampaignCreated) {
                         emittedEvent = event;
@@ -23,14 +23,14 @@ describe('Campaign', () => {
             expect(emittedEvent).not.toBeNull();
             expect(emittedEvent!.campaignId).toBe(CAMPAIGN_ID);
             expect(emittedEvent!.name).toBe('Test Campaign');
-            expect(emittedEvent!.businessType).toBe(BusinessType.STANDARD);
+            expect(emittedEvent!.businessType).toBe(BusinessProductType.STANDARD);
         });
     });
 
     describe('changeBusinessType', () => {
         it('should change business type and emit event', () => {
             let emittedEvent: CampaignBusinessTypeChanged | null = null;
-            const campaign = new Campaign( CAMPAIGN_ID, 'Test', BusinessType.STANDARD);
+            const campaign = new Campaign( CAMPAIGN_ID, 'Test', BusinessProductType.STANDARD);
             
             campaign.listen((event) => {
                 if (event instanceof CampaignBusinessTypeChanged) {
@@ -38,15 +38,15 @@ describe('Campaign', () => {
                 }
             });
 
-            campaign.changeBusinessType(BusinessType.SPONSORSHIP);
+            campaign.changeBusinessType(BusinessProductType.SPONSORSHIP);
             expect(emittedEvent).not.toBeNull();
-            expect(emittedEvent!.oldType).toBe(BusinessType.STANDARD);
-            expect(emittedEvent!.newType).toBe(BusinessType.SPONSORSHIP);
+            expect(emittedEvent!.oldType).toBe(BusinessProductType.STANDARD);
+            expect(emittedEvent!.newType).toBe(BusinessProductType.SPONSORSHIP);
         });
 
         it('should not emit event if new type is the same', () => {
             let emittedEvent: CampaignBusinessTypeChanged | null = null;
-            const campaign = new Campaign(CAMPAIGN_ID, 'Test', BusinessType.SPONSORSHIP);
+            const campaign = new Campaign(CAMPAIGN_ID, 'Test', BusinessProductType.SPONSORSHIP);
             campaign.listen((event) => {
                 if (event instanceof CampaignBusinessTypeChanged) {
                     emittedEvent = event;
@@ -62,7 +62,7 @@ describe('Campaign', () => {
             const campaign = Campaign.fromState({
                 id:   CAMPAIGN_ID,
                 name: 'Test',
-                businessType: BusinessType.STANDARD
+                businessType: BusinessProductType.STANDARD
             });
 
             campaign.listen(() => {

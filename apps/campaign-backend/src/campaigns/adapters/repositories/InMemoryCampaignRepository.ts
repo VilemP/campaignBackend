@@ -1,12 +1,12 @@
 import { Campaign } from '../../Campaign.js';
 import { CampaignId } from '../../CampaignId.js';
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 import { CampaignRepository, CampaignAlreadyExists, CampaignNotFoundError } from './CampaignRepository.js';
 
 export class InMemoryCampaignRepository implements CampaignRepository {
     private campaigns = new Map<string, Campaign>();
 
-    async createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign> {
+    async createCampaign(id: CampaignId, name: string, businessType: BusinessProductType): Promise<Campaign> {
         const campaignId = id.toString();
         if (this.campaigns.has(campaignId)) {
             throw new CampaignAlreadyExists(campaignId);

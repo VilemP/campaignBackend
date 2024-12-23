@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 import { CreateCampaignCommand } from './Command.js';
 import { CAMPAIGN_REPOSITORY } from '../../adapters/di/di.tokens.js';
 import { AppModule } from '../../../app.module.js';
@@ -44,7 +44,7 @@ describe('POST /campaigns endpoint', () => {
         expect(executeSpy).toHaveBeenCalledWith({
             id: httpRequest.id,
             name: httpRequest.name,
-            businessType: BusinessType.STANDARD
+            businessType: BusinessProductType.STANDARD
         });
     });
 
@@ -67,7 +67,7 @@ describe('POST /campaigns endpoint', () => {
         expect(executeSpy).toHaveBeenCalledWith({
             id: httpRequest.id,
             name: httpRequest.name,
-            businessType: BusinessType.STANDARD
+            businessType: BusinessProductType.STANDARD
         });
     });
 

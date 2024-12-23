@@ -1,5 +1,5 @@
 import { Entity } from '@libs/domain';
-import { BusinessType } from '../domain/model/types.js';
+import { BusinessProductType } from '../business-products/productTypes.js';
 import { CampaignCreated, CampaignBusinessTypeChanged } from './events/CampaignEvents.js';
 import { CampaignState } from './CampaignState.js';
 import { CampaignId } from './CampaignId.js';
@@ -7,14 +7,14 @@ import { DomainEvent } from '@libs/domain';
 
 export class Campaign extends Entity<CampaignId> {
     private name: string;
-    private businessType: BusinessType;
+    private businessType: BusinessProductType;
     // @ts-expect-error Placeholder for future use
     private description?: string;
 
     constructor(
         id: CampaignId,
         name: string,
-        businessType: BusinessType,
+        businessType: BusinessProductType,
         listeners?: Array<(event: DomainEvent) => void>
     ) {
         super(id, listeners);
@@ -41,7 +41,7 @@ export class Campaign extends Entity<CampaignId> {
         return this.name;
     }
 
-    changeBusinessType(newType: BusinessType): void {
+    changeBusinessType(newType: BusinessProductType): void {
 
         const oldType = this.businessType;
         this.businessType = newType;

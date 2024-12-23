@@ -5,7 +5,7 @@ import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
 import { CampaignState } from '../../CampaignState.js';
 import { CampaignId } from '../../CampaignId.js';
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 import { UntrackedCampaignError, CampaignPersistenceError } from './errors.js';
 
 const SNAPSHOT_INTERVAL = 100;
@@ -17,7 +17,7 @@ export class EventSourcedCampaignRepository implements CampaignRepository {
 
     constructor(private readonly eventStore: EventStore) {}
 
-    async createCampaign(id: CampaignId, name: string, businessType: BusinessType): Promise<Campaign> {
+    async createCampaign(id: CampaignId, name: string, businessType: BusinessProductType): Promise<Campaign> {
         try {
             const creationEvents: DomainEvent[] = [];
             const campaign = new Campaign(

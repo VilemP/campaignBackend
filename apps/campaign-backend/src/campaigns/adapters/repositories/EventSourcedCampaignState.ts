@@ -1,4 +1,4 @@
-import { BusinessType } from '../../../domain/model/types.js';
+import { BusinessProductType } from '../../../business-products/productTypes.js';
 import { CampaignState } from '../../CampaignState.js';
 import { DomainEvent } from '@libs/domain';
 import { CampaignCreated, CampaignBusinessTypeChanged } from '../../events/CampaignEvents.js';
@@ -8,7 +8,7 @@ export class EventSourcedCampaignState implements CampaignState {
     constructor(
         readonly id: CampaignId,
         readonly name: string,
-        readonly businessType: BusinessType,
+        readonly businessType: BusinessProductType,
         readonly description?: string
     ) {}
 
@@ -16,7 +16,7 @@ export class EventSourcedCampaignState implements CampaignState {
         return new EventSourcedCampaignState(
             new CampaignId(id),
             '',
-            BusinessType.STANDARD
+            BusinessProductType.STANDARD
         );
     }
 

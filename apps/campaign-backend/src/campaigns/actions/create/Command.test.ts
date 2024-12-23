@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CreateCampaignCommand } from './Command.js';
-import { BusinessType } from '@campaign-backend/domain/model/types.js';
+import { BusinessProductType } from '@campaign-backend/business-products/productTypes.js';
 import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 import { CampaignAlreadyExists } from '../../adapters/repositories/CampaignRepository.js';
 import { InMemoryCampaignRepository } from '../../adapters/repositories/InMemoryCampaignRepository.js';
@@ -11,7 +11,7 @@ describe('Campaign Creation', () => {
         const campaignData = {
             id: campaignId.toString(),
             name: 'Test Campaign',
-            businessType: BusinessType.STANDARD
+            businessType: BusinessProductType.STANDARD
         };
 
         let repository: InMemoryCampaignRepository;

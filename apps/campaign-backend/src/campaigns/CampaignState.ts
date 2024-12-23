@@ -1,9 +1,9 @@
-import { CampaignId } from '../../campaigns/CampaignId.js';
-import { BusinessType } from './types.js';
+import { CampaignId } from './CampaignId.js';
+import { BusinessProductType } from '../business-products/productTypes.js';
 
 export interface CampaignState {
     readonly id: CampaignId;
     readonly name: string;
-    readonly businessType: BusinessType;
+    readonly businessType: BusinessProductType;
     readonly description?: string;
-} 
+}

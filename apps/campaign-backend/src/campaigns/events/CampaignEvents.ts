@@ -1,12 +1,12 @@
 import { DomainEvent } from '@libs/domain';
-import { BusinessType } from '../model/types.js';
+import { BusinessProductType } from '../../business-products/productTypes.js';
 import { CampaignId } from '../../campaigns/CampaignId.js';
 
 export class CampaignCreated extends DomainEvent {
     constructor(
         readonly campaignId: CampaignId,
         readonly name: string,
-        readonly businessType: BusinessType
+        readonly businessType: BusinessProductType
     ) {
         super();
     }
@@ -15,8 +15,8 @@ export class CampaignCreated extends DomainEvent {
 export class CampaignBusinessTypeChanged extends DomainEvent {
     constructor(
         readonly campaignId: CampaignId,
-        readonly oldType: BusinessType,
-        readonly newType: BusinessType
+        readonly oldType: BusinessProductType,
+        readonly newType: BusinessProductType   
     ) {
         super();
     }

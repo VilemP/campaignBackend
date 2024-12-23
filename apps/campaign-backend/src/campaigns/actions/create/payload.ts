@@ -1,5 +1,5 @@
 import { IsString, IsEnum, IsUUID, Length, IsNotEmpty } from 'class-validator';
-import { BusinessType } from '../../domain/model/types.js';
+import { BusinessType } from '../../../domain/model/types.js';
 
 
 export class CreateCampaignPayload {

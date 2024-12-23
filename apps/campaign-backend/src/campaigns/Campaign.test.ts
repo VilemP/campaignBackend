@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Campaign } from './Campaign.js';
 import { BusinessType } from '../domain/model/types.js';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../domain/events/CampaignEvents.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from './events/CampaignEvents.js';
 import { DomainEvent } from '@libs/domain';
 import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 

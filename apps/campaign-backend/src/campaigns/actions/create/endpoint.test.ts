@@ -2,10 +2,10 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { BusinessType } from '../../domain/model/types.js';
+import { BusinessType } from '../../../domain/model/types.js';
 import { CreateCampaignCommand } from './Command.js';
-import { CAMPAIGN_REPOSITORY } from '../adapters/di/di.tokens.js';
-import { AppModule } from '../../app.module.js';
+import { CAMPAIGN_REPOSITORY } from '../../adapters/di/di.tokens.js';
+import { AppModule } from '../../../app.module.js';
 import { InMemoryCampaignRepository } from '@campaign-backend/campaigns/adapters/repositories/InMemoryCampaignRepository.js';
 
 describe('POST /campaigns endpoint', () => {

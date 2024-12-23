@@ -1,6 +1,6 @@
 import { Entity } from '@libs/domain';
 import { BusinessType } from '../domain/model/types.js';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../domain/events/CampaignEvents.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from './events/CampaignEvents.js';
 import { CampaignState } from './CampaignState.js';
 import { CampaignId } from './CampaignId.js';
 import { DomainEvent } from '@libs/domain';

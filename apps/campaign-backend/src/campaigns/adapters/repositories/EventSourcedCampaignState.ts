@@ -1,7 +1,7 @@
 import { BusinessType } from '../../../domain/model/types.js';
 import { CampaignState } from '../../CampaignState.js';
 import { DomainEvent } from '@libs/domain';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../../../domain/events/CampaignEvents.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from '../../events/CampaignEvents.js';
 import { CampaignId } from '../../CampaignId.js';
 
 export class EventSourcedCampaignState implements CampaignState {

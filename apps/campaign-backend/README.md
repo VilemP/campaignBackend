@@ -4,6 +4,11 @@ This backend application provides a RESTful API for managing advertising campaig
 
 ## Getting Started
 
+### Build API docs on command line:
+```bash
+npx vite build --config ./apps/campaign-backend/vite.openapi.config.ts && node dist/apps/campaign-backend/docs/openapi.js
+```
+
 ### Prerequisites
 - Node.js >= 18
 - pnpm >= 8.0

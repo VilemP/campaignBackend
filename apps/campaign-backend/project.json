@@ -51,6 +51,14 @@
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/apps/campaign-backend"
       }
+    },
+    "generate-docs": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "campaign-backend:build",
+        "watch": false,
+        "file": "apps/campaign-backend/src/docs/openapi.ts"
+      }
     }
   },
   "tags": []

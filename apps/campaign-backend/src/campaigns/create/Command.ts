@@ -1,5 +1,5 @@
 import { Command } from '@libs/rest-api';
-import { CampaignRepository } from '../../persistence/repositories/CampaignRepository.js';
+import { CampaignRepository } from '../adapters/CampaignRepository.js';
 import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 import { CreateCampaignPayload } from '@campaign-backend/campaigns/create/payload.js';
 

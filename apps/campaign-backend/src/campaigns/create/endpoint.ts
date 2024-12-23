@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { CreateCampaignPayload } from './payload.js';
 import { CreateCampaignCommand } from './Command.js';
-import type  { CampaignRepository } from '../../persistence/repositories/CampaignRepository.js';
+import type  { CampaignRepository } from '../adapters/CampaignRepository.js';
 import { CAMPAIGN_REPOSITORY } from '../../api/http/nest/campaign.token.js';
 
 @Controller('campaigns')

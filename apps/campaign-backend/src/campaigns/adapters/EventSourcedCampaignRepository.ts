@@ -1,12 +1,12 @@
 import { EventStore, EventCollector, EventRecord, ConcurrencyError } from '@libs/event-sourcing';
-import { Campaign } from '../../campaigns/Campaign.js';
+import { Campaign } from '../Campaign.js';
 import { CampaignAlreadyExists, CampaignRepository} from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
-import { CampaignState } from '../../campaigns/CampaignState.js';
-import { CampaignId } from '../../campaigns/CampaignId.js';
+import { CampaignState } from '../CampaignState.js';
+import { CampaignId } from '../CampaignId.js';
 import { BusinessType } from '../../domain/model/types.js';
-import { UntrackedCampaignError, CampaignPersistenceError } from '../errors.js';
+import { UntrackedCampaignError, CampaignPersistenceError } from './errors.js';
 
 const SNAPSHOT_INTERVAL = 100;
 

@@ -6,7 +6,7 @@ import { BusinessType } from '../../domain/model/types.js';
 import { CreateCampaignCommand } from './Command.js';
 import { CAMPAIGN_REPOSITORY } from '../../api/http/nest/campaign.token.js';
 import { AppModule } from '../../app.module.js';
-import { InMemoryCampaignRepository } from '@campaign-backend/persistence/repositories/InMemoryCampaignRepository.js';
+import { InMemoryCampaignRepository } from '@campaign-backend/campaigns/adapters/InMemoryCampaignRepository.js';
 
 describe('POST /campaigns endpoint', () => {
     let app: INestApplication;

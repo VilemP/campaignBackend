@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CreateCampaignEndpoint } from '../../../campaigns/create/endpoint.js';
-import { EventSourcedCampaignRepository } from '../../../campaigns/adapters/EventSourcedCampaignRepository.js';
-import { InMemoryCampaignRepository } from '../../../campaigns/adapters/InMemoryCampaignRepository.js';
-import { CAMPAIGN_REPOSITORY } from './campaign.token.js';
+import { EventSourcedCampaignRepository } from '../../../campaigns/adapters/repositories/EventSourcedCampaignRepository.js';
+import { InMemoryCampaignRepository } from '../../../campaigns/adapters/repositories/InMemoryCampaignRepository.js';
+import { CAMPAIGN_REPOSITORY } from '../../../campaigns/adapters/di/di.tokens.js';
 
 @Module({
     controllers: [

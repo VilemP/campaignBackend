@@ -4,8 +4,8 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../../app.module.js';
 import { BusinessType } from '../../domain/model/types.js';
-import { CAMPAIGN_REPOSITORY } from '../../api/http/nest/campaign.token.js';
-import { EventSourcedCampaignRepository } from '../../campaigns/adapters/EventSourcedCampaignRepository.js';
+import { CAMPAIGN_REPOSITORY } from '../../campaigns/adapters/di/di.tokens.js';
+import { EventSourcedCampaignRepository } from '../../campaigns/adapters/repositories/EventSourcedCampaignRepository.js';
 import { InMemoryEventStore } from '@libs/event-sourcing';
 import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 

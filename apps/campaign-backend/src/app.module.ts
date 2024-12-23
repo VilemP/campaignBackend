@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CampaignModule } from './api/http/nest/campaign.module.js';
+import { CampaignModule } from './campaigns/adapters/http/campaign.module.js';
 import { APP_PIPE } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 

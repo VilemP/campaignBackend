@@ -1,5 +1,5 @@
-import { Campaign } from '../../domain/model/Campaign.js';
-import { CampaignId } from '../../domain/model/CampaignId.js';
+import { Campaign } from '../../campaigns/Campaign.js';
+import { CampaignId } from '../../campaigns/CampaignId.js';
 import { BusinessType } from '../../domain/model/types.js';
 
 export interface CampaignRepository {

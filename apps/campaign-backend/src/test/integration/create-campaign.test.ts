@@ -7,6 +7,7 @@ import { BusinessType } from '../../domain/model/types.js';
 import { CAMPAIGN_REPOSITORY } from '../../api/http/nest/campaign.token.js';
 import { EventSourcedCampaignRepository } from '../../persistence/repositories/EventSourcedCampaignRepository.js';
 import { InMemoryEventStore } from '@libs/event-sourcing';
+import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 
 describe('Create Campaign Integration', () => {
     let app: INestApplication;
@@ -33,7 +34,7 @@ describe('Create Campaign Integration', () => {
 
     it('should create campaign and return 201', async () => {
         const payload = {
-            id: crypto.randomUUID(),
+            id: CampaignId.generate().toString(),
             name: 'Test Campaign',
             businessType: BusinessType.STANDARD,
         };

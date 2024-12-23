@@ -1,4 +1,4 @@
-import { CampaignId } from './CampaignId.js';
+import { CampaignId } from '../../campaigns/CampaignId.js';
 import { BusinessType } from './types.js';
 
 export interface CampaignState {

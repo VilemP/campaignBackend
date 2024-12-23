@@ -3,7 +3,7 @@ import { Campaign } from './Campaign.js';
 import { BusinessType } from '../domain/model/types.js';
 import { CampaignCreated, CampaignBusinessTypeChanged } from '../domain/events/CampaignEvents.js';
 import { DomainEvent } from '@libs/domain';
-import { CampaignId } from '@campaign-backend/domain/model/CampaignId.js';
+import { CampaignId } from '@campaign-backend/campaigns/CampaignId.js';
 
 const CAMPAIGN_ID = CampaignId.generate();
 describe('Campaign', () => {

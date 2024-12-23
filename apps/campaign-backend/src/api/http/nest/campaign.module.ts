@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { CampaignController } from './campaign.controller.js';
+import { CreateCampaignEndpoint } from '../../../campaigns/create/endpoint.js';
 import { EventSourcedCampaignRepository } from '../../../persistence/repositories/EventSourcedCampaignRepository.js';
 import { InMemoryCampaignRepository } from '../../../persistence/repositories/InMemoryCampaignRepository.js';
 import { CAMPAIGN_REPOSITORY } from './campaign.token.js';
 
 @Module({
-    controllers: [CampaignController],
+    controllers: [
+        CreateCampaignEndpoint
+    ],
     providers: [{
         provide: CAMPAIGN_REPOSITORY,
         useClass: true

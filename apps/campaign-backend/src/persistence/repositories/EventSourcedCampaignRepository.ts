@@ -3,8 +3,8 @@ import { Campaign } from '../../campaigns/Campaign.js';
 import { CampaignAlreadyExists, CampaignRepository} from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';
-import { CampaignState } from '../../domain/model/CampaignState.js';
-import { CampaignId } from '../../domain/model/CampaignId.js';
+import { CampaignState } from '../../campaigns/CampaignState.js';
+import { CampaignId } from '../../campaigns/CampaignId.js';
 import { BusinessType } from '../../domain/model/types.js';
 import { UntrackedCampaignError, CampaignPersistenceError } from '../errors.js';
 

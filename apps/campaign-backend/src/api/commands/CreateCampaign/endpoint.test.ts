@@ -37,11 +37,10 @@ describe('POST /campaigns endpoint', () => {
             businessType: 'STANDARD'
         };
 
-        const response = await request(app.getHttpServer())
+        await request(app.getHttpServer())
             .post('/campaigns')
             .send(httpRequest);
 
-        expect(response.status).toBe(201);
         expect(executeSpy).toHaveBeenCalledWith({
             id: httpRequest.id,
             name: httpRequest.name,

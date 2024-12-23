@@ -1,8 +1,8 @@
 import { Entity } from '@libs/domain';
-import { BusinessType } from './types.js';
-import { CampaignCreated, CampaignBusinessTypeChanged } from '../events/CampaignEvents.js';
-import { CampaignState } from './CampaignState.js';
-import { CampaignId } from './CampaignId.js';
+import { BusinessType } from '../domain/model/types.js';
+import { CampaignCreated, CampaignBusinessTypeChanged } from '../domain/events/CampaignEvents.js';
+import { CampaignState } from '../domain/model/CampaignState.js';
+import { CampaignId } from '../domain/model/CampaignId.js';
 import { DomainEvent } from '@libs/domain';
 
 export class Campaign extends Entity<CampaignId> {
@@ -33,18 +33,12 @@ export class Campaign extends Entity<CampaignId> {
         return campaign;
     }
 
-    getName(): string {
-        return this.name;
-    }
-
-    getId(): CampaignId {
-        return this.id;
-    }
-
     changeBusinessType(newType: BusinessType): void {
+
         const oldType = this.businessType;
         this.businessType = newType;
-
-        this.emit(new CampaignBusinessTypeChanged(this.id, oldType, newType));
+        if (oldType != newType) {
+            this.emit(new CampaignBusinessTypeChanged(this.id, oldType, newType));
+        }
     }
 }

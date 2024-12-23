@@ -1,5 +1,5 @@
 import { EventStore, EventCollector, EventRecord, ConcurrencyError } from '@libs/event-sourcing';
-import { Campaign } from '../../domain/model/Campaign.js';
+import { Campaign } from '../../campaigns/Campaign.js';
 import { CampaignAlreadyExists, CampaignRepository} from './CampaignRepository.js';
 import { DomainEvent } from '@libs/domain';
 import { EventSourcedCampaignState } from './EventSourcedCampaignState.js';

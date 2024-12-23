@@ -12,8 +12,12 @@ export class CampaignController {
     ) {}
 
     @Post()
-    async create(@Body() createCampaignData: CreateCampaignData): Promise<void> {
+    async create(
+        @Body() 
+        createCampaignData: CreateCampaignData): Promise<void> 
+    {
         const command = new CreateCampaignCommand(this.repository);
         await command.execute(createCampaignData);
     }
+
 }

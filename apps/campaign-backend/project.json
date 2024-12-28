@@ -52,12 +52,14 @@
         "reportsDirectory": "../../coverage/apps/campaign-backend"
       }
     },
-    "generate-docs": {
-      "executor": "@nx/js:node",
+    "generate-openapi-docs": {
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "campaign-backend:build",
-        "watch": false,
-        "file": "apps/campaign-backend/src/docs/openapi.ts"
+        "commands": [
+          "vite build --config ./apps/campaign-backend/vite.openapi.config.ts",
+          "node ./dist/apps/campaign-backend/docs/openapi.js"
+        ],
+        "parallel": false
       }
     }
   },

@@ -14,6 +14,7 @@
     "test:pact": "nx run campaign-backend:test --testMatch='**/*.pact.spec.ts'",
     "test:ui": "nx run campaign-backend:test --ui",
     "lint": "nx lint",
+    "generate-docs": "nx generate-openapi-docs campaign-backend",
     "format": "nx format:write",
     "affected:test": "nx affected:test",
     "affected:lint": "nx affected:lint",

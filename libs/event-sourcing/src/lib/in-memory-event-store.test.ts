@@ -29,7 +29,7 @@ describe('InMemoryEventStore', () => {
 
     describe('append', () => {
         it('should append events to an empty stream', async () => {
-            const event = createEventRecord('stream-1', 0, 'test');
+            const event = createEventRecord('stream-1', 1, 'test');
             await store.append('stream-1', [event]);
 
             const { events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
@@ -38,8 +38,8 @@ describe('InMemoryEventStore', () => {
         });
 
         it('should append multiple events in sequence', async () => {
-            const event1 = createEventRecord('stream-1', 0, 'test1');
-            const event2 = createEventRecord('stream-1', 1, 'test2');
+            const event1 = createEventRecord('stream-1', 1, 'test1');
+            const event2 = createEventRecord('stream-1', 2, 'test2');
 
             await store.append('stream-1', [event1]);
             await store.append('stream-1', [event2]);
@@ -51,10 +51,10 @@ describe('InMemoryEventStore', () => {
         });
 
         it('should enforce optimistic concurrency', async () => {
-            const event1 = createEventRecord('stream-1', 0, 'test1');
+            const event1 = createEventRecord('stream-1', 1, 'test1');
             await store.append('stream-1', [event1]);
 
-            const event2 = createEventRecord('stream-1', 1, 'test2');
+            const event2 = createEventRecord('stream-1', 2, 'test2');
             await expect(
                 store.append('stream-1', [event2], 0)
             ).rejects.toThrow(ConcurrencyError);
@@ -64,9 +64,9 @@ describe('InMemoryEventStore', () => {
     describe('readStream', () => {
         beforeEach(async () => {
             await store.append('stream-1', [
-                createEventRecord('stream-1', 0, 'test1'),
-                createEventRecord('stream-1', 1, 'test2'),
-                createEventRecord('stream-1', 2, 'test3')
+                createEventRecord('stream-1', 1, 'test1'),
+                createEventRecord('stream-1', 2, 'test2'),
+                createEventRecord('stream-1', 3, 'test3')
             ]);
         });
 
@@ -83,12 +83,12 @@ describe('InMemoryEventStore', () => {
             expect(state).toEqual(initialState);
         });
     });
-
+//TODO - check snapshoting logic 
     describe('storeStateAsSnapshot', () => {
         it('should store state and return it on next read', async () => {
             await store.append('stream-1', [
-                createEventRecord('stream-1', 0, 'test1'),
-                createEventRecord('stream-1', 1, 'test2')
+                createEventRecord('stream-1', 1, 'test1'),
+                createEventRecord('stream-1', 2, 'test2')
             ]);
 
             const stateToStore: TestState = { items: ['test1', 'test2'] };
@@ -97,14 +97,14 @@ describe('InMemoryEventStore', () => {
             const { state, events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
             expect(state).toEqual(stateToStore);
             expect(events).toHaveLength(1);
-            expect(events[0].event.data).toBe('test3');
+            expect(events[0].event.data).toBe('test2');
         });
 
         it('should only return events after snapshot version', async () => {
             await store.append('stream-1', [
-                createEventRecord('stream-1', 0, 'test1'),
-                createEventRecord('stream-1', 1, 'test2'),
-                createEventRecord('stream-1', 2, 'test3')
+                createEventRecord('stream-1', 1, 'test1'),
+                createEventRecord('stream-1', 2, 'test2'),
+                createEventRecord('stream-1', 3, 'test3')
             ]);
 
             const stateAfterTwoEvents: TestState = { items: ['test1', 'test2'] };
@@ -112,8 +112,8 @@ describe('InMemoryEventStore', () => {
 
             const { state, events } = await store.readStream<TestEvent, TestState>('stream-1', initialState);
             expect(state).toEqual(stateAfterTwoEvents);
-            expect(events).toHaveLength(1);
-            expect(events[0].event.data).toBe('test3');
+            expect(events).toHaveLength(2);
+            expect(events[0].event.data).toBe('test2');
         });
     });
 });

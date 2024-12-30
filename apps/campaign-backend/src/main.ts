@@ -9,10 +9,10 @@ async function bootstrap() {
     const port = process.env['PORT'] || 3000;
 
     const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Campaign backend')
+    .setDescription('The campaign backend API description')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('campaigns')
     .build();
 
     const documentFactory = () => SwaggerModule.createDocument(app, config);

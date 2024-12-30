@@ -3,7 +3,9 @@ import { CreateCampaignPayload } from './payload.js';
 import { CreateCampaignCommand } from './Command.js';
 import type  { CampaignRepository } from '../../adapters/repositories/CampaignRepository.js';
 import { CAMPAIGN_REPOSITORY } from '../../adapters/di/di.tokens.js';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Create new campaign')
 @Controller('campaigns')
 export class CreateCampaignEndpoint {
     constructor(
